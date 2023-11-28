@@ -82,6 +82,7 @@ class LessorDocumentsModel(models.Model):
 
 class LeasePropertyModel(models.Model):
 
+    lessor = models.ForeignKey(LessorModel, on_delete=models.CASCADE, blank=True, null=True)
     property_address =  models.ForeignKey(AddressModel, on_delete=models.CASCADE)
     location = models.CharField(max_length=500, null=True, blank=True)
     avaible = models.BooleanField(default=False)
