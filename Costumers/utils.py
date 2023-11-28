@@ -57,3 +57,15 @@ def save_proof_address(instance, filename):
     new_filename = f"{today}-{user}-{token}{ext}"
 
     return os.path.join('media', 'documents', 'proof_address', new_filename)
+
+def save_acount_tenant(instance, filename):
+
+    today = timezone.now().date()
+    user = instance.tenant.user.username
+    token = generate_token()
+
+    name, ext = os.path.splitext(filename)
+
+    new_filename = f"{today}-{user}-{token}{ext}"
+
+    return os.path.join('media', 'documents', 'bank_data_tenant', new_filename)
