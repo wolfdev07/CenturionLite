@@ -46,7 +46,7 @@ class LessorModel(models.Model):
     gender =  models.CharField(max_length=120, blank=True, null=True)
     occupation = models.CharField(max_length=250, null=True, blank=True)
     membership = models.CharField(max_length=20)
-    address_current = models.ForeignKey(AddressModel, on_delete=models.CASCADE)
+    address_current = models.ForeignKey(AddressModel, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     broker = models.ForeignKey(Broker, on_delete=models.CASCADE)
     finish = models.BooleanField(default=False)
@@ -118,7 +118,7 @@ class TenantModel(models.Model):
     membership = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
     broker = models.ForeignKey(Broker, on_delete=models.CASCADE)
-    house_in_perspective = models.ForeignKey(LeasePropertyModel, on_delete=models.CASCADE)
+    house_in_perspective = models.ForeignKey(LeasePropertyModel, on_delete=models.CASCADE, null=True, blank=True)
     is_owner =  models.BooleanField(default=True)
     finish = models.BooleanField(default=False)
 

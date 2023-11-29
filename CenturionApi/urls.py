@@ -3,5 +3,5 @@ from CenturionApi import views
 
 
 urlpatterns = [
-    path('signin/', views.SignIn.as_view(), name='signin')
+    path('signin/', views.SignIn.as_view(), name='signin'),
 ]

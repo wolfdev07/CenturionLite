@@ -1,3 +1,10 @@
-<div>
+{% extends 'layout.html' %}
+
+
+{% block content %}
+<form action="{% url 'signin' %}" method="POST">
+    {% csrf_token %}
     {{ form }}
-</div>
+    <button type="submit" >ingresar</button>
+</form>
+{% endblock content %}

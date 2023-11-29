@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+
+    {% if is_broker %}
+        <div>
+            <img src="/media/{{ broker.agency.brand }}">
+            <h3> {{ broker.agency.name }} </h3>
+        </div>
+        <h2>SI ERES BROKER PA {{ broker.user.first_name }} {{ broker.user.last_name }}</h2>
+    {% endif %}
+    
+    <form action="{% url 'dashboard' %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Guardar</button>
+    </form>
+
+    <div>
+        <p>Arrendadores</p>
+        {% for costumer in costumers_lessors %}
+            <p>{{ costumer }}</p>
+        {% endfor %}
+    </div>
+
+    <div>
+        <p> Tenants </p>
+        {% for costumer in costumers_tenants %}
+            <p>{{ costumer }}</p>
+        {% endfor %}
+    </div>
+
+{% endblock content %}
