@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 
 
 from Brokers.models import Broker
 
-
+# Iniciar Sesion
 class SignIn(View):
     template_name = "auth/signin.html"
 
@@ -44,3 +44,9 @@ class SignIn(View):
                 return redirect('dashboard')
             else:
                 return redirect('costumers')
+
+
+# LOGOUT FUNCTION
+def signout(request):
+    logout(request)
+    return redirect('signin')

@@ -1,10 +1,32 @@
 {% extends 'layout.html' %}
-
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<form action="{% url 'signin' %}" method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" >ingresar</button>
-</form>
+<div class="container text-center align-items-center">
+    <h2 class="fs-1">
+        <img class="mb-4" src="{% static 'images/favicon.svg' %}" alt="" width="72" height="57">
+        Centurion <span class="text-bg-secondary rounded p-1">Lite</span>
+    </h2>
+<div class="row justify-content-md-center">
+    <div class="card col-lg-4 col-sm-10 shadow mb-3">
+        <div class="card-body">
+            <main class="form-signin w-100 m-auto">
+                <form action="{% url 'signin' %}" method="POST">
+                <h2 class="h3 mb-3 fw-normal">Iniciar Sesion</h2>
+            
+                <div class="form-floating">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                </div>
+            
+                    <button class="btn btn-primary w-100 py-2" type="submit">Ingresar</button>
+                </form>
+            </main>
+        </div>
+    </div>
+</div>
+
+</div>
+
 {% endblock content %}
