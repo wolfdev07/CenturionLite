@@ -1,34 +1,61 @@
 {% extends 'layout.html' %}
 {% load static %}
 
-{% block content %}
+{% block main %}
+<p class="f-6">Hola, {{ user.first_name }} {{ user.last_name }}!</p>
+<h4>Dashboard <i class="bx bx-grid-alt"></i></h4>
 
-    {% if is_broker %}
-        <div>
-            <img src="/media/{{ broker.agency.brand }}">
-            <h3> {{ broker.agency.name }} </h3>
+<div class="row mb-2">
+    <div class="col text-end">
+        <button class="btn btn-primary btn-sm">Nuevo Cliente <i class="fa fa-user-plus" ></i></button>
+    </div>
+</div>
+
+<div class="row mb-3">
+
+    <div class="card col-lg-6 col-m-12 mb-3">
+        <div class="card-body">
+            <div class="card-title">
+                <h5>Arrendadores</h5>
+            </div>
+            {% for costumer in costumers_lessors %}
+            <p class="card-text">{{ costumer }}</p>
+            {% endfor %}
         </div>
-        <h2>SI ERES BROKER PA {{ broker.user.first_name }} {{ broker.user.last_name }}</h2>
-    {% endif %}
-    
+    </div>
+
+
+    <div class="card col-lg-6 col-m-12 mb-3">
+        <div class="card-body">
+            <div class="card-title">
+                <h5> Arrendatarios <i class="fa fa-house"></i></h5>
+            </div>
+            {% for costumer in costumers_tenants %}
+                <p class="card-text">{{ costumer }}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+    <div class="card col-12 mb-3">
+        <div class="card-body">
+            <div class="card-title">
+                <h5>Rentas en Curso</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
     <form action="{% url 'dashboard' %}" method="POST">
         {% csrf_token %}
         {{ form }}
         <button type="submit">Guardar</button>
     </form>
 
-    <div>
-        <p>Arrendadores</p>
-        {% for costumer in costumers_lessors %}
-            <p>{{ costumer }}</p>
-        {% endfor %}
-    </div>
-
-    <div>
-        <p> Tenants </p>
-        {% for costumer in costumers_tenants %}
-            <p>{{ costumer }}</p>
-        {% endfor %}
-    </div>
-
-{% endblock content %}
+{% endblock main %}

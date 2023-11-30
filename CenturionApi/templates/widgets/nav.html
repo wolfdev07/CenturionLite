@@ -1,0 +1,13 @@
+{% load static %}
+<header class="header" id="header">
+    <div class="header_toggle"> 
+        <i class='bx bx-menu' id="header-toggle"></i> 
+    </div>
+    <div class="header_img">
+        {% if is_broker %}
+            <img src="/media/{{ broker.agency.brand }}" alt="">
+        {% else %}
+            <img src="" alt="">
+        {% endif %}
+    </div>
+</header>
