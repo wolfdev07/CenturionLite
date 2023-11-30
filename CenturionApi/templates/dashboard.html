@@ -1,61 +1,186 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block main %}
-<p class="f-6">Hola, {{ user.first_name }} {{ user.last_name }}!</p>
-<h4>Dashboard <i class="bx bx-grid-alt"></i></h4>
+<!-- MODAL FORM -->
+<form action="{% url 'dashboard' %}" method="POST" class="modal fade" id="ModalForm" tabindex="-10" aria-labelledby="ModalFormLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="ModalFormLabel">Agregar Cliente <i class="fa fa-user-plus"></i></h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
+            <div class="modal-body">
+                {% csrf_token %}
+                {{ form|crispy }}
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- MODAL FORM -->
+
+<!-- PAGE TITLE -->
 <div class="row mb-2">
+    <div class="text-end">
+        <span class="badge text-bg-dark">
+            Broker: {{ user.first_name }} {{ user.last_name }}
+        </span>
+    </div>
+    <h4>Dashboard <i class="bx bx-grid-alt"></i></h4>
+</div>
+<!-- PAGE TITLE -->
+
+<!-- MODAL BUTTON -->
+<div class="row mb-3">
     <div class="col text-end">
-        <button class="btn btn-primary btn-sm">Nuevo Cliente <i class="fa fa-user-plus" ></i></button>
+
+        <button type="button"  class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#ModalForm">
+            Nuevo Cliente <i class="fa fa-user-plus" ></i>
+        </button>
     </div>
 </div>
+<!-- MODAL BUTTON -->
 
+<!-- CONTENT TABLES -->
 <div class="row mb-3">
 
-    <div class="card col-lg-6 col-m-12 mb-3">
-        <div class="card-body">
-            <div class="card-title">
-                <h5>Arrendadores</h5>
+    <!-- CARD ARRENDADORES -->
+    <div class="col-lg-6 col-m-12 mb-3">
+        <div class="card shadow rounded">
+            <div class="card-header">
+                <h5>Arrendadores <i class="fa-solid fa-house"></i></h5>
             </div>
-            {% for costumer in costumers_lessors %}
-            <p class="card-text">{{ costumer }}</p>
-            {% endfor %}
+            <div class="card-body">
+
+                <div class="accordion" id="accordionLessors">
+                    {% for costumer in costumers_lessors %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ costumer.membership }}" aria-expanded="false" aria-controls="collapse{{ costumer.membership }}">
+                                    {{ costumer.user.first_name }} {{ costumer.user.last_name }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ costumer.membership }}" class="accordion-collapse collapse" data-bs-parent="#accordionLessors">
+                                <div class="accordion-body">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Estatus</th>
+                                                    <th scope="col">Información</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr>
+                                                {% if costumer.user.is_active %}
+                                                    <th scope="row"><span class="badge text-bg-success">Activo</span></th>
+                                                {% else %}
+                                                    <th scope="row"><span class="badge text-bg-danger">Inactivo</span></th>
+                                                {% endif %}
+                                                    <td>
+                                                        <a class="icon-link icon-link-hover" href="#">
+                                                            <i class="fa-solid fa-file-invoice"></i>
+                                                        Ver
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div class="card-footer text-body-secondary">
+                
+            </div>
         </div>
     </div>
+    <!-- CARD ARRENDADORES -->
 
 
-    <div class="card col-lg-6 col-m-12 mb-3">
-        <div class="card-body">
-            <div class="card-title">
-                <h5> Arrendatarios <i class="fa fa-house"></i></h5>
+    <!-- CARD ARRENDATARIOS -->
+    <div class="col-lg-6 col-m-12 mb-3">
+        <div class="card shadow rounded">
+            <div class="card-header">
+                <h5> Arrendatarios <i class="fa fa-user"></i></h5>
             </div>
-            {% for costumer in costumers_tenants %}
-                <p class="card-text">{{ costumer }}</p>
-            {% endfor %}
+            <div class="card-body">
+                <div class="accordion" id="accordionLessors">
+                    {% for costumer in costumers_tenants %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ costumer.membership }}" aria-expanded="false" aria-controls="collapse{{ costumer.membership }}">
+                                    {{ costumer.user.first_name }} {{ costumer.user.last_name }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ costumer.membership }}" class="accordion-collapse collapse" data-bs-parent="#accordionLessors">
+                                <div class="accordion-body">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Estatus</th>
+                                                    <th scope="col">Información</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr>
+                                                {% if costumer.user.is_active %}
+                                                    <th scope="row"><span class="badge text-bg-success">Activo</span></th>
+                                                {% else %}
+                                                    <th scope="row"><span class="badge text-bg-danger">Inactivo</span></th>
+                                                {% endif %}
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer text-body-secondary">
+                
+            </div>
         </div>
     </div>
+    <!-- CARD ARRENDATARIOS -->
 
 
-
-    <div class="card col-12 mb-3">
-        <div class="card-body">
-            <div class="card-title">
-                <h5>Rentas en Curso</h5>
+    <!-- CARD RENTAS EN CURSO -->
+    <div class="col-12 mb-3">
+        <div class="card shadow rounded">
+            <div class="card-header">
+                <h5>Rentas en Curso <i class="fa-solid fa-house-user"></i></h5>
+            </div>
+            <div class="card-body">
+    
+            </div>
+            <div class="card-footer text-body-secondary">
+                
             </div>
         </div>
     </div>
+    <!-- CARD RENTAS EN CURSO -->
+
 </div>
+<!-- CONTENT TABLES -->
 
-
-
-
-
-
-    <form action="{% url 'dashboard' %}" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit">Guardar</button>
-    </form>
 
 {% endblock main %}
