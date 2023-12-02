@@ -81,7 +81,7 @@
 
                                             <tbody>
                                                 <tr>
-                                                {% if costumer.user.is_active %}
+                                                {% if costumer.is_active %}
                                                     <th scope="row"><span class="badge text-bg-success">Activo</span></th>
                                                 {% else %}
                                                     <th scope="row"><span class="badge text-bg-danger">Inactivo</span></th>
@@ -139,12 +139,17 @@
 
                                             <tbody>
                                                 <tr>
-                                                {% if costumer.user.is_active %}
+                                                {% if costumer.is_active %}
                                                     <th scope="row"><span class="badge text-bg-success">Activo</span></th>
                                                 {% else %}
                                                     <th scope="row"><span class="badge text-bg-danger">Inactivo</span></th>
                                                 {% endif %}
-                                                    <td></td>
+                                                    <td>
+                                                        <a class="icon-link icon-link-hover" href="#">
+                                                            <i class="fa-solid fa-file-invoice"></i>
+                                                        Ver
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>

@@ -3,8 +3,15 @@ from django.views.generic import View
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 
-
 from Brokers.models import Broker
+
+
+# INDEX
+
+def index(request):
+    return redirect('signin')
+
+
 
 # Iniciar Sesion
 class SignIn(View):

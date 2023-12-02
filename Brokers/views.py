@@ -2,17 +2,17 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 
 from Brokers.forms import CustomerCreationForm
 from Brokers.models import Agencies, Broker
 from Brokers.utils import generate_temp_password, validate_phone_number
-from CenturionApi.utils import create_costumer_membership, send_message, send_message_api, send_message_template, set_username
+from CenturionApi.utils import create_costumer_membership, send_wa_credentials
 from Costumers.models import LessorModel, TenantModel
 
 
 class Dashboard(View):
     template_name = "dashboard.html"
+    context={}
 
     def get(self, request):
 
@@ -51,7 +51,7 @@ class Dashboard(View):
         else: 
             return redirect('signin')
     
-    def post(sefl, request):
+    def post(self, request):
 
         user = request.user
         broker = Broker.objects.get(user=user)
@@ -63,6 +63,7 @@ class Dashboard(View):
 
         try:
             is_lessor = request.POST['is_lessor']
+            is_lessor = True
         except:
             is_lessor = False
 
@@ -75,8 +76,9 @@ class Dashboard(View):
             user_costumer = User.objects.create(username=phone, password=hashed_temp_password)
             user_costumer.first_name = first_name
             user_costumer.last_name = last_name
-            user_costumer.is_active = True
+            user_costumer.is_active = False
             user_costumer.save()
+            print(f"{user_costumer}: {temp_password}")
 
             phone_complete = f"{phone_code}{phone}"
             membership = create_costumer_membership()
@@ -87,7 +89,6 @@ class Dashboard(View):
                                                             broker=broker, 
                                                             membership=membership )
                 create_lessor.save()
-                return redirect('dashboard')
 
             else:
                 create_tenant = TenantModel.objects.create( user=user_costumer,
@@ -96,19 +97,23 @@ class Dashboard(View):
                                                             membership=membership )
                 create_tenant.save()
 
-                data = {
-                    'brokername': f"{request.user.first_name} {request.user.last_name}",
-                    'phone_complete': phone_complete,
-                    'name': f"{first_name} {last_name}",
-                    'is_lessor': is_lessor,
-                    'user': phone,
-                    'password': temp_password,
-                }
-                
-                send = send_message_template(data)
 
-                if send:
-                    print(f"{user_costumer}: {temp_password}")
-                    return redirect('dashboard')
-                else:
-                    return redirect('dashboard')
+            data = {
+                'brokername': f"{request.user.first_name} {request.user.last_name}",
+                'code_country':phone_code,
+                'phone': phone,
+                'name': f"{first_name} {last_name}",
+                'user': phone,
+                'password': temp_password,
+                'is_lessor' : is_lessor,
+            }
+            
+            send = send_wa_credentials(data)
+
+            if send:
+                self.context['success'] = "Usuario creado con exito."
+                return redirect('dashboard')
+            else:
+                user_costumer.delete()
+                self.context['error'] = "No se pudo guardar los cambios"
+                return render(request, self.template_name, self.context)
