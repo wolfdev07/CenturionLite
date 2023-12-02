@@ -3,8 +3,10 @@ from django.contrib.auth.decorators import login_required
 
 from Costumers import views
 
-costumers = login_required(views.Costumers.as_view())
+compilance = login_required(views.Compilance.as_view())
+lessors = login_required(views.Lessors.as_view())
 
 urlpatterns = [
-    path('compilance/', costumers, name='costumers'),
+    path('compilance/', compilance, name='compilance'),
+    path('lessors/', lessors, name='lessors'),
 ]

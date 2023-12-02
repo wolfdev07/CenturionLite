@@ -4,9 +4,10 @@ from django.views.generic import View
 from django.contrib.auth.models import User
 
 from Brokers.forms import CustomerCreationForm
-from Brokers.models import Agencies, Broker
+from Brokers.models import Broker
 from Brokers.utils import generate_temp_password, validate_phone_number
 from CenturionApi.utils import create_costumer_membership, send_wa_credentials
+from CenturionApi.models import NoticeOfPrivacy
 from Costumers.models import LessorModel, TenantModel
 
 
@@ -76,7 +77,7 @@ class Dashboard(View):
             user_costumer = User.objects.create(username=phone, password=hashed_temp_password)
             user_costumer.first_name = first_name
             user_costumer.last_name = last_name
-            user_costumer.is_active = False
+            user_costumer.is_active = True
             user_costumer.save()
             print(f"{user_costumer}: {temp_password}")
 
@@ -97,6 +98,7 @@ class Dashboard(View):
                                                             membership=membership )
                 create_tenant.save()
 
+            NoticeOfPrivacy.objects.create(user=user_costumer, accept=False) 
 
             data = {
                 'brokername': f"{request.user.first_name} {request.user.last_name}",

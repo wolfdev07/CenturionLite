@@ -48,7 +48,7 @@ class SignIn(View):
             if is_broker:
                 return redirect('dashboard')
             else:
-                return redirect('costumers')
+                return redirect('compilance')
 
 
 # LOGOUT FUNCTION

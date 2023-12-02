@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+<div class="row mt-3">
+    <div class="col-12 mt-3">
+        <form action="{% url 'lessors' %}" method="POST" class="card mt-3">
+            <div class="card-header">{{ form_name }}</div>
+            <div class="card-body">
+                {% csrf_token %}
+                {{ form|crispy }}
+            </div>
+            <div class="card-footer text-end">
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock main %}
