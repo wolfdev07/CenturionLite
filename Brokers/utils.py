@@ -2,6 +2,7 @@ import os
 import string
 import random
 import re
+from django.contrib.auth.hashers import make_password
 
 def agency_brand_path(instance, filename):
     # Obtener la extensión del archivo
@@ -20,7 +21,9 @@ def generate_temp_password(length=8):
     # Generar una contraseña temporal aleatoria
     temp_password = ''.join(random.choice(characters) for _ in range(length))
 
-    return temp_password
+    hashed_temp_pasword = make_password(temp_password)
+
+    return temp_password, hashed_temp_pasword
 
 
 def validate_phone_number(phone):

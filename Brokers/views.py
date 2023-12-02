@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 from Brokers.forms import CustomerCreationForm
 from Brokers.models import Agencies, Broker
@@ -69,13 +70,12 @@ class Dashboard(View):
         
         if phone_is_valid & bool(first_name) & bool(last_name):
 
-            put_username = set_username(first_name, last_name)
-            temp_password = generate_temp_password()
+            temp_password, hashed_temp_password = generate_temp_password()
 
-            user_costumer = User.objects.create(username=put_username, password=temp_password)
+            user_costumer = User.objects.create(username=phone, password=hashed_temp_password)
             user_costumer.first_name = first_name
             user_costumer.last_name = last_name
-            user_costumer.is_active = False
+            user_costumer.is_active = True
             user_costumer.save()
 
             phone_complete = f"{phone_code}{phone}"
@@ -108,6 +108,7 @@ class Dashboard(View):
                 send = send_message_template(data)
 
                 if send:
+                    print(f"{user_costumer}: {temp_password}")
                     return redirect('dashboard')
                 else:
                     return redirect('dashboard')

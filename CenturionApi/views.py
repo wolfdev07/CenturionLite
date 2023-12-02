@@ -13,7 +13,7 @@ class SignIn(View):
             'form': AuthenticationForm,
         }
     def get(self, request):
-        
+        self.context['viewname']="Sign In"
         return render(request, self.template_name, self.context)
     
     def post(self, request):
