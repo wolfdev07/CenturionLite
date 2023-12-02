@@ -9,14 +9,12 @@ from Brokers.models import Broker
 # Iniciar Sesion
 class SignIn(View):
     template_name = "auth/signin.html"
-
-    def get(self, request):
-
-        context = {
+    context = {
             'form': AuthenticationForm,
         }
-    
-        return render(request, self.template_name, context=context)
+    def get(self, request):
+        
+        return render(request, self.template_name, self.context)
     
     def post(self, request):
 
@@ -26,7 +24,7 @@ class SignIn(View):
         user = authenticate(request, username=username, password=password)
 
         if user is None:
-
+            print(f"{ username } es none")
             self.context['error'] = 'Usuario o password incorrectos'
             return render(request, self.template_name, self.context)
         

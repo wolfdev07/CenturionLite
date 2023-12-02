@@ -7,5 +7,4 @@ dashboard = login_required(views.Dashboard.as_view())
 
 urlpatterns = [
     path('dashboard/', dashboard, name='dashboard'),
-
 ]

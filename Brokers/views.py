@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from Brokers.forms import CustomerCreationForm
 from Brokers.models import Agencies, Broker
 from Brokers.utils import generate_temp_password, validate_phone_number
-from CenturionApi.utils import create_costumer_membership
+from CenturionApi.utils import create_costumer_membership, send_message, send_message_api, send_message_template, set_username
 from Costumers.models import LessorModel, TenantModel
 
 
@@ -69,20 +69,21 @@ class Dashboard(View):
         
         if phone_is_valid & bool(first_name) & bool(last_name):
 
+            put_username = set_username(first_name, last_name)
             temp_password = generate_temp_password()
 
-            user_costumer = User.objects.create(username=phone, password=temp_password)
+            user_costumer = User.objects.create(username=put_username, password=temp_password)
             user_costumer.first_name = first_name
             user_costumer.last_name = last_name
             user_costumer.is_active = False
             user_costumer.save()
 
-            phone_lessor = f"{phone_code}{phone}"
+            phone_complete = f"{phone_code}{phone}"
             membership = create_costumer_membership()
 
             if is_lessor:
                 create_lessor = LessorModel.objects.create( user=user_costumer, 
-                                                            phone=phone_lessor, 
+                                                            phone=phone_complete, 
                                                             broker=broker, 
                                                             membership=membership )
                 create_lessor.save()
@@ -90,8 +91,23 @@ class Dashboard(View):
 
             else:
                 create_tenant = TenantModel.objects.create( user=user_costumer,
-                                                            phone=phone_lessor, 
+                                                            phone=phone_complete, 
                                                             broker=broker, 
                                                             membership=membership )
                 create_tenant.save()
-                return redirect('dashboard')
+
+                data = {
+                    'brokername': f"{request.user.first_name} {request.user.last_name}",
+                    'phone_complete': phone_complete,
+                    'name': f"{first_name} {last_name}",
+                    'is_lessor': is_lessor,
+                    'user': phone,
+                    'password': temp_password,
+                }
+                
+                send = send_message_template(data)
+
+                if send:
+                    return redirect('dashboard')
+                else:
+                    return redirect('dashboard')

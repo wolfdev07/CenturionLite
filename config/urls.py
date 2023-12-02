@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('CenturionApi.urls')),
     path('brokers/', include('Brokers.urls')),
+    path('costumers/', include('Costumers.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
