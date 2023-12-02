@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
+from django.contrib.auth.models import User
 
 
 from CenturionApi.models import NoticeOfPrivacy
 from CenturionApi.forms import NoticeOfPrivacyForm
 from Costumers.models import LessorModel, TenantModel
+from Costumers.forms import UserLessorForm
 
 class Compilance(View):
     template_name = 'compilance.html'
@@ -32,7 +34,7 @@ class Compilance(View):
                 tenant = TenantModel.objects.get(user=user)
 
             if is_lessor:
-                return redirect('lessors')
+                return redirect('lessors', form="general")
             elif not is_lessor:
                 return redirect('tenants')
     
@@ -61,7 +63,7 @@ class Lessors(View):
     context = {'viewname': "Arrendadores",
                 "is_broker": False,}
     
-    def get(self, request):
+    def get(self, request, form):
         
         user = request.user
 
@@ -70,4 +72,40 @@ class Lessors(View):
         except LessorModel.DoesNotExist:
             return redirect('costumers')
         
-        return render(request, self.template_name, self.context)
+        user_data =  User.objects.get(user=user)
+        email= user_data.email
+        complete_lessor_profile = lessor.finish
+        
+        if not email or form == "general":
+        
+            self.context['form_name'] = 'General'
+            self.context['description']='Completa tu informacion'
+            self.context['form'] = UserLessorForm(instance=user)
+
+            return render(request, self.template_name, self.context)
+        
+        elif email & form == "personal" or not complete_lessor_profile:
+
+            self.context['form_name'] = 'Personal'
+            self.context['description'] = 'Completa tu informacion personal'
+            self.context['form'] = UserLessorForm
+
+
+    def post(self, request, form):
+
+        user = request.user
+
+
+        if form == "general":
+            name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            email = request.POST['email']
+
+            update_user = User.objects.get(user=user)
+
+            update_user.first_name = name
+            update_user.last_name = last_name
+            update_user.email = email
+            update_user.save()
+
+            return redirect('lessors', "personal")
