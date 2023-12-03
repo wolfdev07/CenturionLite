@@ -44,7 +44,7 @@
 </div>
 
 <div class="aling-items-center text-bg-dark shadow p-2 mt-3 mb-2">
-    <form action="{% url 'costumers' %}" method="POST">
+    <form action="{% url 'compilance' %}" method="POST">
         <div class="justify-content-center align-self-center">
             {% csrf_token %}
             <input type="hidden" name="privacy-notice" value="true">

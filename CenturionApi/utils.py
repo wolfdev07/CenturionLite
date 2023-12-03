@@ -33,7 +33,7 @@ def send_wa_credentials(data):
     else:
 
         message = (
-            f"Hola, {name}. Has recibido este mensaje porque tu asesor inmobiliario {brokername}, "
+            f"Hola, {name}. Has recibido este mensaje porque tu asesor inmobiliario {brokername},"
             f"te ha registrado con éxito, por favor ingresa para completar tu solicitud de arrendamiento.\n"
             f"usuario: {user}\n"
             f"contraseña: {password}\n"

@@ -40,6 +40,8 @@ class LessorModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=250)
     curp = models.CharField(max_length=120, unique=True, blank=True, null=True)
+    #NACIONALIDAD
+    #DATOS DE IDENTIFICACION
     elector_key = models.CharField(max_length=120, unique=True, blank=True, null=True)
     rfc = models.CharField(max_length=60, blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
@@ -61,6 +63,7 @@ class DataPaymentModel(models.Model):
     bank = models.CharField(max_length=120)
     interbank_account = models.CharField(max_length=200)
     account = models.CharField(max_length=200, blank=True, null=True)
+    # OTRAS ESPECIFICACIONES
 
     def __str__(self):
         return f'{self.bank} - {self.account}'
@@ -73,6 +76,8 @@ class LessorDocumentsModel(models.Model):
     document_identification_back = models.FileField(upload_to=save_id_document) 
     document_deed_property = models.FileField(upload_to=save_deeds)
     proof_address = models.FileField(upload_to=save_proof_address)
+    # COMPROBANTE DE DOMICILIO A RENTAR
+    # OTROS REGLAMENTO INTERIOR PUBLICO O PRIVADO
     acount_bank = models.FileField(upload_to=save_acount_lessor)
     finish = models.BooleanField(default=False)
 
@@ -89,6 +94,8 @@ class LeasePropertyModel(models.Model):
     rental_price = models.CharField(max_length=350)
     maintenance_price = models.CharField(max_length=350)
     maintenance_included = models.BooleanField()
+    # NUMERO DE SERVICIO CFE
+    # NUMERO SERVICIO AGUA
     finish = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -110,6 +117,8 @@ class TenantModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=250)
     curp = models.CharField(max_length=120, unique=True, blank=True, null=True)
+    # NACIONALIDAD
+    # NUMERO DE IDENTIFICACION OFICIAL (NUMERO DE PASAPORTE, NUMERO CLAVE DE ELECTOR, Y/O NUMERO DE CEDULA)
     elector_key = models.CharField(max_length=120, unique=True, blank=True, null=True)
     rfc = models.CharField(max_length=60, blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
@@ -128,6 +137,7 @@ class TenantModel(models.Model):
 
 class TenantEconomicModel(models.Model):
 
+    #ACTIVIDAD ECONOMICA
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     income_per_month =  models.CharField(max_length=400)
     name_labor_source = models.CharField(max_length=120)
@@ -150,6 +160,7 @@ class TenantSocioModel(models.Model):
     spouse_name = models.CharField(max_length=120, blank=True, null=True)
     spouse_income = models.CharField(max_length=120, blank=True, null=True)
     last_grade_of_school = models.CharField(max_length=120)
+    # CANTIDAD DE MASCOTAS
     pets = models.CharField(max_length=120)
     pet_breed = models.CharField(max_length=120)
     cohabitants = models.CharField(max_length=120)
@@ -183,6 +194,7 @@ class TenantDocumentsModel(models.Model):
     document_identification_front = models.FileField(upload_to=save_id_document)
     document_identification_back = models.FileField(upload_to=save_id_document)
     proof_address = models.FileField(upload_to=save_proof_address)
+    # ESTADOS DE CUENTA COMPLETOS, RECIBOS DE NOMINA O DECLARACION ANUAL
     first_receipt = models.FileField(upload_to=save_acount_tenant)
     second_receipt = models.FileField(upload_to=save_acount_tenant)
     third_receipt = models.FileField(upload_to=save_acount_tenant)

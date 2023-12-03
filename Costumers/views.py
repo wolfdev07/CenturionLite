@@ -34,7 +34,7 @@ class Compilance(View):
                 tenant = TenantModel.objects.get(user=user)
 
             if is_lessor:
-                return redirect('lessors', form="general")
+                return redirect('lessors')
             elif not is_lessor:
                 return redirect('tenants')
     
@@ -63,20 +63,21 @@ class Lessors(View):
     context = {'viewname': "Arrendadores",
                 "is_broker": False,}
     
-    def get(self, request, form):
+    def get(self, request):
         
         user = request.user
+        pk = user.pk
 
         try:
             lessor = LessorModel.objects.get(user=user)
         except LessorModel.DoesNotExist:
-            return redirect('costumers')
+            return redirect('compilance')
         
-        user_data =  User.objects.get(user=user)
+        user_data =  User.objects.get(pk=pk)
         email= user_data.email
         complete_lessor_profile = lessor.finish
         
-        if not email or form == "general":
+        if not email:
         
             self.context['form_name'] = 'General'
             self.context['description']='Completa tu informacion'
@@ -84,28 +85,28 @@ class Lessors(View):
 
             return render(request, self.template_name, self.context)
         
-        elif email & form == "personal" or not complete_lessor_profile:
+        elif email or not complete_lessor_profile:
 
             self.context['form_name'] = 'Personal'
             self.context['description'] = 'Completa tu informacion personal'
             self.context['form'] = UserLessorForm
 
 
-    def post(self, request, form):
+    def post(self, request):
 
         user = request.user
+        pk = user.pk
 
 
-        if form == "general":
-            name = request.POST['first_name']
-            last_name = request.POST['last_name']
-            email = request.POST['email']
+        name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
 
-            update_user = User.objects.get(user=user)
+        update_user = User.objects.get(pk=pk)
 
-            update_user.first_name = name
-            update_user.last_name = last_name
-            update_user.email = email
-            update_user.save()
+        update_user.first_name = name
+        update_user.last_name = last_name
+        update_user.email = email
+        update_user.save()
 
-            return redirect('lessors', "personal")
+        return redirect('lessors')

@@ -8,26 +8,25 @@
         <img class="mb-4" src="{% static 'images/favicon.svg' %}" alt="" width="72" height="57">
         Centurion <span class="text-bg-secondary rounded p-1">Lite</span>
     </h2>
-<div class="row justify-content-md-center">
-    <div class="card col-lg-4 col-sm-10 shadow mb-3">
-        <div class="card-body">
-            <main class="form-signin w-100 m-auto">
-                <form action="{% url 'signin' %}" method="POST">
-                <h2 class="h3 mb-3 fw-normal">Iniciar Sesion</h2>
-            
-                <div class="form-floating">
-                    {% csrf_token %}
-                    {{ form|crispy }}
-                    <div class="invalid-feedback">{{ error }}</div>
-                </div>
-            
-                    <button class="btn btn-primary w-100 py-2" type="submit">Ingresar</button>
-                </form>
-            </main>
+    <div class="row justify-content-md-center">
+        <div class="card col-lg-4 col-sm-10 shadow mb-3">
+            <div class="card-body">
+                <main class="form-signin w-100 m-auto">
+                    <form action="{% url 'signin' %}" method="POST">
+                    <h2 class="h3 mb-3 fw-normal">Iniciar Sesion</h2>
+                
+                    <div class="form-floating">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    </div>
+                
+                        <button class="btn btn-primary w-100 py-2" type="submit">Ingresar</button>
+                    </form>
+                </main>
+            </div>
         </div>
     </div>
-</div>
-
 </div>
 
 {% endblock content %}
