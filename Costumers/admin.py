@@ -1,8 +1,11 @@
 from django.contrib import admin
 from Costumers.models import *
 
-# Register your models here.
+#EXTENDS COSTUMER USER MODEL
 
+admin.site.register(Profile)
+
+#LESSOR ADMIN MODELS
 
 admin.site.register(AddressModel)
 admin.site.register(ReferencesModel)

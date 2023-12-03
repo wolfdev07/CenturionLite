@@ -93,20 +93,9 @@ class Lessors(View):
 
 
     def post(self, request):
-
-        user = request.user
-        pk = user.pk
-
-
-        name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-
-        update_user = User.objects.get(pk=pk)
-
-        update_user.first_name = name
-        update_user.last_name = last_name
-        update_user.email = email
-        update_user.save()
+        form = UserLessorForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
 
         return redirect('lessors')

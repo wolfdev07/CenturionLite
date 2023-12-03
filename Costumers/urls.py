@@ -8,6 +8,5 @@ lessors = login_required(views.Lessors.as_view())
 
 urlpatterns = [
     path('compilance/', compilance, name='compilance'),
-    path('lessors/<str:form>/', lessors, name='lessors_forms'),
     path('lessors/', lessors, name='lessors'),
 ]

@@ -5,8 +5,27 @@ from CenturionApi.models import Settlement
 from Costumers.utils import *
 # Create your models here.
 
+"""
+
+FORMULARIO EXTIENDE DE USER, PARA ESPECIFICAR LOS CAMPOS.
+
 
 """
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100)
+    second_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100)
+    second_last_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.user.username
+
+
+"""
+
 ESTE MODELO SE OCUPARA PARA PODER SER USADO PARA DIRECCIONES
 
 """

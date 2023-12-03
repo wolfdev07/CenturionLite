@@ -1,17 +1,19 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from Costumers.models import LessorModel
+from Costumers.models import Profile, LessorModel
 
 
 class UserLessorForm(forms.ModelForm):
 
     class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email']
+        model = Profile
+        fields = ['first_name', 'second_name', 'last_name', 'second_last_name','email']
         labels = {
-            'first_name' : 'Nombre(s)',
-            'last_name': 'Apellidos',
+            'first_name' : 'Primer Nombre',
+            'second_name': 'Segundo Nombre',
+            'last_name': 'Apellido Paterno',
+            'second_last_name': 'Apellido Materno', 
             'email': 'Correo Electrónico',
         }
 
