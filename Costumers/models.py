@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from Brokers.models import Broker
 from CenturionApi.models import Settlement
 from Costumers.utils import *
@@ -64,7 +65,7 @@ class LessorModel(models.Model):
     #DATOS DE IDENTIFICACION
     elector_key = models.CharField(max_length=120, unique=True, blank=True, null=True)
     rfc = models.CharField(max_length=60, blank=True, null=True)
-    birthday = models.DateField(blank=True, null=True)
+    birthday = models.DateField()
     gender =  models.CharField(max_length=120, blank=True, null=True)
     occupation = models.CharField(max_length=250, null=True, blank=True)
     membership = models.CharField(max_length=20)

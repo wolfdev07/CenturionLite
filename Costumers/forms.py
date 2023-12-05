@@ -2,7 +2,7 @@ from django import forms
 from django.forms import DateInput
 from django.contrib.auth.models import User
 
-from Costumers.models import Profile, LessorModel
+from Costumers.models import Profile, LessorModel, AddressModel
 
 
 ocupaciones_generales = [
@@ -70,7 +70,7 @@ class LessorForm(forms.ModelForm):
             'nationality': 'Nacionalidad',
             'curp': 'CURP*',
             'elector_key': 'Numero de ID*',
-            'birthday': 'Fecha de Nacimiento*',
+            'birthday': 'Fecha de Nacimiento',
             'occupation': 'Ocupacion*',
         }
 
@@ -82,4 +82,19 @@ class LessorForm(forms.ModelForm):
                                             'required': 'required'}),
             'birthday': DateInput(attrs={'type': 'date'}),
             'occupation': forms.Select(choices=(ocupaciones_generales), attrs={'class': 'form-group form-control'}),
+        }
+
+
+class AddressForm(forms.ModelForm):
+
+
+
+    class Meta:
+        model = AddressModel
+        fields = ['street', 'number', 'internal_number']
+
+        labels = {
+            'street':'Calle',
+            'number': 'Numero',
+            'internal_number': 'Numero Interior',
         }

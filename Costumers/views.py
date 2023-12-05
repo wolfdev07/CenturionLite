@@ -135,7 +135,7 @@ class Lessors(View):
         except LessorModel.DoesNotExist:
             return redirect('tenants')
         
-        
+        instance = LessorModel.objects.get(user=user)
         profile = Profile.objects.get(user=user)
         profile_complete = profile.finished
 
@@ -143,7 +143,7 @@ class Lessors(View):
             self.context['is_lessor']= is_lessor
             self.context['form_name'] = 'Complementaria'
             self.context['description']='Completa los campos'
-            self.context['form'] = LessorForm(instance=lessor)
+            self.context['form'] = LessorForm(instance=instance)
             self.context['url_post'] = "/costumers/lessors/"
             self.context['form_finished'] = profile_complete
             self.context['prev_btn_url']= "/costumers/profile/"
@@ -166,3 +166,26 @@ class Lessors(View):
             form.save()
 
         return redirect('lessors')
+
+
+
+
+class ConcurrentAddress(View):
+    template_name = "forms.html"
+    context = {'viewname': "Profile",
+                "is_broker": False,}
+    
+    def get(self, request):
+        user = request.user
+
+        try:
+            lessor = LessorModel.objects.get(user=user)
+            is_lessor=True
+        except LessorModel.DoesNotExist:
+            try:
+                tenant = TenantModel.objects.get(user=user)
+                is_lessor=False
+            except  TenantModel.DoesNotExist:
+                return redirect('signin')
+        
+        
