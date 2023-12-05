@@ -8,7 +8,7 @@ from Brokers.models import Broker
 from Brokers.utils import generate_temp_password, validate_phone_number
 from CenturionApi.utils import create_costumer_membership, send_wa_credentials
 from CenturionApi.models import NoticeOfPrivacy
-from Costumers.models import LessorModel, TenantModel
+from Costumers.models import LessorModel, TenantModel, Profile
 
 
 class Dashboard(View):
@@ -98,7 +98,11 @@ class Dashboard(View):
                                                             membership=membership )
                 create_tenant.save()
 
-            NoticeOfPrivacy.objects.create(user=user_costumer, accept=False) 
+            NoticeOfPrivacy.objects.create(user=user_costumer, accept=False)
+            
+            Profile.objects.create(user=user_costumer, 
+                                    first_name=user_costumer.first_name,
+                                    last_name=user_costumer.last_name,)
 
             data = {
                 'brokername': f"{request.user.first_name} {request.user.last_name}",

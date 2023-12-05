@@ -5,8 +5,11 @@ from django.contrib.auth.models import User
 
 from CenturionApi.models import NoticeOfPrivacy
 from CenturionApi.forms import NoticeOfPrivacyForm
-from Costumers.models import LessorModel, TenantModel
-from Costumers.forms import UserLessorForm
+from Costumers.models import LessorModel, TenantModel, Profile
+from Costumers.forms import ProfileForm, LessorForm
+
+
+# COSTUMERS VIEWS
 
 class Compilance(View):
     template_name = 'compilance.html'
@@ -26,17 +29,7 @@ class Compilance(View):
             return render(request, self.template_name, self.context)
         elif privacy_accepted:
     
-            is_lessor = False
-            try:
-                lessor = LessorModel.objects.get(user=user)
-                is_lessor = True
-            except LessorModel.DoesNotExist:
-                tenant = TenantModel.objects.get(user=user)
-
-            if is_lessor:
-                return redirect('lessors')
-            elif not is_lessor:
-                return redirect('tenants')
+            return redirect('profile_costumer')
     
     def post(self, request):
 
@@ -58,7 +51,76 @@ class Compilance(View):
 
 
 
+
+class ProfileUser(View):
+
+    template_name =  "forms.html"
+    context = {'viewname': "Profile",
+                "is_broker": False,}
+    
+    def get(self, request):
+        # IDENTIFICAR AL USER POR REQUEST
+        user =  request.user
+
+        # COMPROBAR SI ES ARRENDADOR
+        try:
+            lessor = LessorModel.objects.get(user=user)
+            is_lessor = True
+        except LessorModel.DoesNotExist:
+            
+            try: 
+                tenant = TenantModel.objects.get(user=user)
+            except TenantModel.DoesNotExist:
+                is_lessor = False
+        
+        instance_profile = Profile.objects.get(user=user)
+
+
+        self.context['is_lessor']= is_lessor
+        self.context['form_name'] = 'Perfil'
+        self.context['description']='Completa tu información'
+        self.context['form'] = ProfileForm(instance=instance_profile)
+        self.context['url_post'] = "/costumers/profile/"
+        self.context['form_finished'] = instance_profile.finished
+
+        if instance_profile.finished:
+            self.context['next_button'] = 'Siguiente'
+            #self.context['prev_button'] = 'Anterior'
+
+        # RENDERIZA PRIMER FORM PROFILE
+        return render(request, self.template_name, self.context)
+    
+    def post(self, request):
+
+        # IDENTIFICAR AL USER POR REQUEST
+        user =  request.user
+        instance_profile = Profile.objects.get(user=user)
+
+        form = ProfileForm(request.POST, instance=instance_profile)
+
+        if form.is_valid():
+            form.save()
+            finished_form = Profile.objects.get(user=user)
+            finished_form.finished = True
+            finished_form.save()
+
+        is_lessor = False
+
+        try:
+            lessor = LessorModel.objects.get(user=user)
+            is_lessor = True
+        except LessorModel.DoesNotExist:
+            tenant = TenantModel.objects.get(user=user)
+
+        if is_lessor:
+            return redirect('lessors')
+        elif not is_lessor:
+            return redirect('tenants')
+
+
+
 class Lessors(View):
+
     template_name = "forms.html"
     context = {'viewname': "Arrendadores",
                 "is_broker": False,}
@@ -66,34 +128,39 @@ class Lessors(View):
     def get(self, request):
         
         user = request.user
-        pk = user.pk
 
         try:
             lessor = LessorModel.objects.get(user=user)
+            is_lessor = True
         except LessorModel.DoesNotExist:
-            return redirect('compilance')
+            return redirect('tenants')
         
-        user_data =  User.objects.get(pk=pk)
-        email= user_data.email
-        complete_lessor_profile = lessor.finish
         
-        if not email:
-        
-            self.context['form_name'] = 'General'
-            self.context['description']='Completa tu informacion'
-            self.context['form'] = UserLessorForm(instance=user)
+        profile = Profile.objects.get(user=user)
+        profile_complete = profile.finished
 
-            return render(request, self.template_name, self.context)
+        if profile_complete:
+            self.context['is_lessor']= is_lessor
+            self.context['form_name'] = 'Complementaria'
+            self.context['description']='Completa los campos'
+            self.context['form'] = LessorForm(instance=lessor)
+            self.context['url_post'] = "/costumers/lessors/"
+            self.context['form_finished'] = profile_complete
+            self.context['prev_btn_url']= "/costumers/profile/"
+            self.context['prev_button'] = 'Anterior'
         
-        elif email or not complete_lessor_profile:
-
-            self.context['form_name'] = 'Personal'
-            self.context['description'] = 'Completa tu informacion personal'
-            self.context['form'] = UserLessorForm
+        
+        if lessor.curp and lessor.elector_key:
+            self.context['next_button'] = 'Siguiente'
+        
+        return render(request, self.template_name, self.context)
 
 
     def post(self, request):
-        form = UserLessorForm(request.POST)
+
+        user = request.user
+        lessor = LessorModel.objects.get(user=user)
+        form = LessorForm(request.POST, instance=lessor)
         
         if form.is_valid():
             form.save()

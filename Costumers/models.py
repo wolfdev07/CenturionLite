@@ -19,6 +19,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=100)
     second_last_name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField()
+    finished = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
@@ -59,7 +60,7 @@ class LessorModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=250)
     curp = models.CharField(max_length=120, unique=True, blank=True, null=True)
-    #NACIONALIDAD
+    nationality = models.CharField(max_length=120, blank=True, null=True)
     #DATOS DE IDENTIFICACION
     elector_key = models.CharField(max_length=120, unique=True, blank=True, null=True)
     rfc = models.CharField(max_length=60, blank=True, null=True)
