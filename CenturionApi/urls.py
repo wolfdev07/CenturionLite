@@ -12,7 +12,6 @@ urlpatterns = [
     path('logout/', views.signout, name='logout'),
     # API URLS
     path(r'api/get-postal-code/<code>/', api.get_postal_code, name='get_postalcode'),
-    
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

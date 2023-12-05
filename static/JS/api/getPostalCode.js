@@ -1,15 +1,16 @@
 'use strict';
 
-const sendPostalCode = document.getElementById('send-postal-code');
-const inputPostalCode = document.getElementById('postal-code-input');
-const selectSettlement = document.getElementById('settlements-select');
-const inputState = document.getElementById('state-input');
-const inputCity = document.getElementById('city-input');
+//const sendPostalCode = document.getElementById('send-postal-code');
+const inputPostalCode = document.getElementById('id_postal_code');
+const selectSettlement = document.getElementById('id_settlement');
+const inputState = document.getElementById('id_state');
+const inputCity = document.getElementById('id_city');
 
 
 
-sendPostalCode.addEventListener('click', ()=>{
-    const apiUrl = `/tools/api/get-postal-code/${inputPostalCode.value}/`;
+inputPostalCode.addEventListener('blur', ()=>{
+
+    const apiUrl = `/api/get-postal-code/${inputPostalCode.value}/`;
 
     fetch(apiUrl)
     .then(response => {
