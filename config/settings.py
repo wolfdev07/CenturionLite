@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'es-mx'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'America/Monterrey'
 
@@ -142,8 +142,6 @@ LOGIN_URL = '/signin/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# CRISPY BOOTSTRAP
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-
-TOKEN_WA = 'EAAyWn9ZCOFVkBOx20DCfU9PcYhTwUQZAzImuIhPzZBj0RHcE4fa4Oygwea7ptRc4svQYdzqLpGqfXZBWna39irXEBGjruyRlOBosDrfEosyJkJDzYcJ46FBVgaC44GBrsbg2f1fRvKBjDQ3j21H0ZADZBvQUFQcq8BenfgJZAgZAF2qg1aCYnSYVGZCUVUWzJkZCR4YgKqFlqTtjUqFhOuTGlmn18SKHNYmGZCZBZAtAZD'

@@ -80,7 +80,7 @@ class LessorForm(forms.ModelForm):
                                             'required': 'required'}),
             'elector_key': forms.TextInput(attrs={'class': 'form-group form-control',
                                             'required': 'required'}),
-            'birthday': DateInput(attrs={'type': 'date'}),
+            'birthday' : DateInput(attrs={'type':'date'}),
             'occupation': forms.Select(choices=(ocupaciones_generales), attrs={'class': 'form-group form-control'}),
         }
 
