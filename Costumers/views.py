@@ -3,10 +3,10 @@ from django.views.generic import View
 from django.contrib.auth.models import User
 
 
-from CenturionApi.models import NoticeOfPrivacy
+from CenturionApi.models import NoticeOfPrivacy, Settlement
 from CenturionApi.forms import NoticeOfPrivacyForm
-from Costumers.models import LessorModel, TenantModel, Profile
-from Costumers.forms import ProfileForm, LessorForm
+from Costumers.models import LessorModel, TenantModel, Profile, AddressModel, TenantEconomicModel, TenantSocioModel
+from Costumers.forms import ProfileForm, LessorForm, AddressForm
 
 
 # COSTUMERS VIEWS
@@ -184,8 +184,71 @@ class ConcurrentAddress(View):
         except LessorModel.DoesNotExist:
             try:
                 tenant = TenantModel.objects.get(user=user)
+
                 is_lessor=False
             except  TenantModel.DoesNotExist:
                 return redirect('signin')
         
+        if is_lessor:
+            instance = lessor.address_current
+            self.context['prev_btn_url']= "/costumers/lessors/"
+            self.context['prev_button'] = 'Anterior'
         
+        else:
+            data_tenant_socio = TenantSocioModel.objects.get(user=user)
+            instance = data_tenant_socio.previous_address
+        
+        self.context['form_name'] = 'Domicilio Actual'
+        self.context['description']='Ingresa tu domicilio actual'
+        self.context['form'] = AddressForm(instance=instance)
+        self.context['url_post'] = "/costumers/address/"
+
+        return render(request, self.template_name, self.context)
+    
+    def post(self, request):
+
+        user = request.user
+
+        # DATA ADDRESS
+
+        settlement_id = request.POST['settlement']
+        street = request.POST['street']
+        number = request.POST['number']
+
+        try:
+            internal_number = request.POST['internal_number']
+        except:
+            internal_number = ''
+
+        try:
+            lessor = LessorModel.objects.get(user=user)
+            is_lessor=True
+        except LessorModel.DoesNotExist:
+            try:
+                tenant = TenantModel.objects.get(user=user)
+                is_lessor=False
+            except  TenantModel.DoesNotExist:
+                return redirect('signin')
+            
+        try:
+                settlement = Settlement.objects.get(pk=settlement_id)
+        except Settlement.DoesNotExist:
+            self.context['error']="no existe el codigo postal"
+            return render(request, self.template_name, self.context)
+            
+        
+        current_address = AddressModel.objects.create(user=user,
+                                                    street=street,
+                                                    number=number,
+                                                    internal_number=internal_number,
+                                                    settlement=settlement,)
+        current_address.save()
+        
+        if is_lessor:
+            lessor.address_current = current_address
+            lessor.save()
+        else:
+            previuos_address = TenantSocioModel.objects.get(user=user)
+            previuos_address.previous_address = current_address
+        
+        return redirect('addres_costumer')

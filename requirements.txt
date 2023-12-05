@@ -10,6 +10,7 @@ colorama==0.4.6
 crispy-bootstrap5==2023.10
 Django==4.2.7
 django-crispy-forms==2.1
+djangorestframework==3.14.0
 fontawesomefree==6.5.0
 frozenlist==1.4.0
 heyoo==0.1.0

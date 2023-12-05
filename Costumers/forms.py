@@ -87,14 +87,23 @@ class LessorForm(forms.ModelForm):
 
 class AddressForm(forms.ModelForm):
 
-
+    postal_code = forms.CharField(label='Código Postal', required=True)
+    state = forms.CharField(label='Estado', required=True, disabled=True)
+    city = forms.CharField(label='Municipio', required=True, disabled=True)
+    settlement = forms.ChoiceField(label='Colonia', required=True, choices=[('', '---')])
 
     class Meta:
         model = AddressModel
-        fields = ['street', 'number', 'internal_number']
-
+        fields = ['postal_code', 'state', 'city', 'settlement', 'street', 'number', 'internal_number']
         labels = {
-            'street':'Calle',
+            'street': 'Calle',
             'number': 'Numero',
             'internal_number': 'Numero Interior',
         }
+
+    def __init__(self, *args, **kwargs):
+        super(AddressForm, self).__init__(*args, **kwargs)
+        self.fields['postal_code'].widget.attrs['class'] = 'form-control'
+        self.fields['state'].widget.attrs['class'] = 'form-control'
+        self.fields['city'].widget.attrs['class'] = 'form-control'
+        self.fields['settlement'].widget.attrs['class'] = 'form-control'
