@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.views.generic import View
@@ -84,10 +86,14 @@ class Dashboard(View):
             phone_complete = f"{phone_code}{phone}"
             membership = create_costumer_membership()
 
+            actual_date = datetime.now()
+            register_date = actual_date - timedelta(days=18 * 365)
+
             if is_lessor:
                 create_lessor = LessorModel.objects.create( user=user_costumer, 
                                                             phone=phone_complete, 
-                                                            broker=broker, 
+                                                            broker=broker,
+                                                            birthday=register_date,
                                                             membership=membership )
                 create_lessor.save()
 
@@ -123,3 +129,47 @@ class Dashboard(View):
                 user_costumer.delete()
                 self.context['error'] = "No se pudo guardar los cambios"
                 return render(request, self.template_name, self.context)
+
+
+
+
+class DetailCostumer(View):
+    template_name = 'costumer_dash.html'
+    context = {'is_broker': True,}
+
+    def get(self, request):
+
+        user = request.user
+
+        try: 
+            broker = Broker.objects.get(user=user)
+            is_broker = True
+        except Broker.DoesNotExist:
+            is_broker = False
+        
+
+        if is_broker:
+
+            try:
+                costumers_lessors = LessorModel.objects.filter(broker=broker)
+            except LessorModel.DoesNotExist:
+                costumers_lessors = {}
+
+            try:
+                costumers_tenants = TenantModel.objects.filter(broker=broker)
+            except TenantModel.DoesNotExist:
+                costumers_tenants = {}
+
+            context = {
+                'viewname': 'Dasboard',
+                'broker': broker,
+                'is_broker' : is_broker,
+                'form': CustomerCreationForm,
+                'costumers_lessors' : costumers_lessors,
+                'costumers_tenants': costumers_tenants,
+            }
+
+            return render(request, self.template_name, context=context)
+        
+        else: 
+            return redirect('signin')
