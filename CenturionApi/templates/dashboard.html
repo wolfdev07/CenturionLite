@@ -61,7 +61,7 @@
     <div class="col-lg-6 col-m-12 mb-3">
         <div class="card shadow rounded">
             <div class="card-header">
-                <h5>Arrendadores <i class="fa-solid fa-house"></i></h5>
+                <h5>Propietarios <i class="fa-solid fa-house"></i></h5>
             </div>
             <div class="card-body">
                 <div class="row text-start">
@@ -70,6 +70,7 @@
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
+                                    <th>Membresia</th>
                                     <th>Estatus</th>
                                 </tr>
                             </thead>
@@ -77,6 +78,7 @@
                             {% for costumer in costumers_lessors %}
                                 <tr>
                                     <td>{{ costumer.user.first_name }} {{ costumer.user.last_name }}</td>
+                                    <td>{{ costumer.membership }}</td>
                                 {% if costumer.is_active %}
                                     <td scope="row"><span class="badge text-bg-success">Activo</span></td>
                                 {% else %}
@@ -103,7 +105,7 @@
     <div class="col-lg-6 col-m-12 mb-3">
         <div class="card shadow rounded">
             <div class="card-header">
-                <h5> Arrendatarios <i class="fa fa-user"></i></h5>
+                <h5>Inquilinos <i class="fa fa-user"></i></h5>
             </div>
             <div class="card-body">
                 <div class="row">
