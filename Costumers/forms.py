@@ -2,7 +2,7 @@ from django import forms
 from django.forms import DateInput
 from django.contrib.auth.models import User
 
-from Costumers.models import Profile, LessorModel, AddressModel
+from Costumers.models import Profile, LessorModel, AddressModel, LeasePropertyModel
 
 
 ocupaciones_generales = [
@@ -96,7 +96,7 @@ class AddressForm(forms.ModelForm):
         model = AddressModel
         fields = ['postal_code', 'state', 'city', 'settlement', 'street', 'number', 'internal_number']
         labels = {
-            'street': 'Calle',
+            'street': 'Calle (De ser necesario agrega: Manzana y Lote)',
             'number': 'Numero',
             'internal_number': 'Numero Interior',
         }
@@ -107,3 +107,25 @@ class AddressForm(forms.ModelForm):
         self.fields['state'].widget.attrs['class'] = 'form-control'
         self.fields['city'].widget.attrs['class'] = 'form-control'
         self.fields['settlement'].widget.attrs['class'] = 'form-control'
+
+
+
+
+class LeasePropertyForm(forms.ModelForm):
+
+    class Meta:
+        model = LeasePropertyModel
+        fields = ['rental_price', 
+                'maintenance_price', 
+                'maintenance_included', 
+                'cfe_service_number', 
+                'water_service_number',
+                'location',]
+        labels = {
+            'rental_price': 'Precio de Renta',
+            'maintenance_price': 'Precio de Mantenimiento',
+            'maintenance_included': 'Incluir costo en monto de renta',
+            'cfe_service_number': 'Número de Servicio CFE*',
+            'water_service_number': 'Número de Servicio Agua*',
+            'location': 'URL ubicación maps',
+        }

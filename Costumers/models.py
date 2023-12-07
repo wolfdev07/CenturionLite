@@ -109,19 +109,19 @@ class LessorDocumentsModel(models.Model):
 class LeasePropertyModel(models.Model):
 
     lessor = models.ForeignKey(LessorModel, on_delete=models.CASCADE, blank=True, null=True)
-    property_address =  models.ForeignKey(AddressModel, on_delete=models.CASCADE)
+    property_address =  models.ForeignKey(AddressModel, on_delete=models.CASCADE, blank=True, null=True)
     location = models.CharField(max_length=500, null=True, blank=True)
-    avaible = models.BooleanField(default=False)
+    avaible = models.BooleanField(default=True)
     rental_price = models.CharField(max_length=350)
     maintenance_price = models.CharField(max_length=350)
     maintenance_included = models.BooleanField()
-    # NUMERO DE SERVICIO CFE
-    # NUMERO SERVICIO AGUA
+    cfe_service_number = models.CharField(max_length=200, null=True, blank=True)
+    water_service_number = models.CharField(max_length=200, null=True, blank=True)
     finish = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.street} {self.number} {self.neighbor.postal_code.city.name} {self.neighbor.postal_code.city.state.name}"
+        return f"{self.lessor}"
     
 
 

@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 
 from CenturionApi.models import NoticeOfPrivacy, Settlement
 from CenturionApi.forms import NoticeOfPrivacyForm
-from Costumers.models import LessorModel, TenantModel, Profile, AddressModel, TenantEconomicModel, TenantSocioModel
-from Costumers.forms import ProfileForm, LessorForm, AddressForm
+from Costumers.models import LessorModel, TenantModel, Profile, AddressModel, TenantEconomicModel, TenantSocioModel, LeasePropertyModel
+from Costumers.forms import ProfileForm, LessorForm, AddressForm, LeasePropertyForm
 
 
 # COSTUMERS VIEWS
@@ -247,8 +247,95 @@ class ConcurrentAddress(View):
         if is_lessor:
             lessor.address_current = current_address
             lessor.save()
+            return redirect('')
         else:
             previuos_address = TenantSocioModel.objects.get(user=user)
             previuos_address.previous_address = current_address
         
         return redirect('addres_costumer')
+
+
+
+
+class CreateLeaseProperty(View):
+    template_name = 'forms.html'
+    context = {'viewname': "Profile",}
+
+    def get(self, request):
+        user =  request.user
+        
+        try:
+            lessor = LessorModel.objects.get(user=user)
+            is_lessor=True
+        except LessorModel.DoesNotExist:
+            try:
+                tenant = TenantModel.objects.get(user=user)
+
+                is_lessor=False
+            except  TenantModel.DoesNotExist:
+                return redirect('signin')
+        
+        if is_lessor:
+            try:
+                instance  = LeasePropertyModel.objects.get(lessor=lessor)
+            except LeasePropertyModel.DoesNotExist:
+                instance = False
+            
+            if instance:
+                form = LeasePropertyForm(instance=instance)
+            else:
+                form = LeasePropertyForm
+
+            self.context['form_name'] = 'Porpiedad en Renta'
+            self.context['description']='Por favor, ingrese los datos para renta'
+            self.context['form'] = form
+            self.context['url_post'] = "/costumers/create/lease/property/"
+
+            return render(request, self.template_name, self.context)
+    
+    def post(self, request):
+        user = request.user
+
+        rental_price = request.POST['rental_price']
+        maintenance_price = request.POST['maintenance_price']
+
+        try:
+            id_maintenance_included = request.POST['id_maintenance_included']
+        except:
+            id_maintenance_included = False
+        
+        cfe_service_number = request.POST['cfe_service_number']
+        water_service_number = request.POST['water_service_number']
+        location = request.POST['location']
+
+        try:
+            lessor = LessorModel.objects.get(user=user)
+            is_lessor=True
+        except LessorModel.DoesNotExist:
+            try:
+                tenant = TenantModel.objects.get(user=user)
+
+                is_lessor=False
+            except  TenantModel.DoesNotExist:
+                return redirect('signin')
+        
+        if is_lessor:
+            lease_property = LeasePropertyModel.objects.create(lessor=lessor,
+                                                                location=location,
+                                                                rental_price=rental_price,
+                                                                maintenance_price=maintenance_price,
+                                                                maintenance_included=id_maintenance_included,
+                                                                cfe_service_number=cfe_service_number,
+                                                                water_service_number=water_service_number,
+                                                                )
+            lease_property.save()
+        
+            return redirect('lease_property_details')
+
+
+
+
+class AddressLeaseProperty(View):
+    template_name = 'forms.html'
+    context = {'viewname': "Address",}
+
