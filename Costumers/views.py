@@ -5,11 +5,93 @@ from django.contrib.auth.models import User
 
 from CenturionApi.models import NoticeOfPrivacy, Settlement
 from CenturionApi.forms import NoticeOfPrivacyForm
+from Brokers.models import Broker
 from Costumers.models import LessorModel, TenantModel, Profile, AddressModel, TenantEconomicModel, TenantSocioModel, LeasePropertyModel
 from Costumers.forms import ProfileForm, LessorForm, AddressForm, LeasePropertyForm
 
 
 # COSTUMERS VIEWS
+
+
+def control_data(request):
+    user = request.user
+
+    try:
+        lessor = LessorModel.objects.get(user=user)
+        is_costumer=True
+        is_lessor=True
+    except LessorModel.DoesNotExist:
+        try:
+            tenant=TenantModel.objects.get(user=user)
+            is_costumer=True
+            is_lessor=False
+        except TenantModel.DoesNotExist:
+            is_costumer=False
+    
+    if is_costumer:
+
+        if is_lessor:
+
+            try:
+                leasse_property=LeasePropertyModel.objects.get(lessor=lessor)
+            except LeasePropertyModel.DoesNotExist:
+                leasse_property=False
+
+            try:
+                finish_lessor_data=LessorModel.objects.get(user=user)
+            except LessorModel.DoesNotExist:
+                return redirect('control_data')
+
+            try:
+                finish_profile=Profile.objects.get(user=user)
+            except Profile.DoesNotExist:
+                finish_profile=False
+            
+            try:
+                compilance = NoticeOfPrivacy.objects.get(user=user)
+            except NoticeOfPrivacy.DoesNotExist:
+                compilance = False
+            
+            if compilance.accept:
+                # FORM CONTROL (REDIRECT TO FORM)
+                if leasse_property:
+
+                    if leasse_property.finish:
+                        return('index_costumers')
+                    elif leasse_property.avaible:
+                        return('lease_property_address')
+                
+                elif finish_lessor_data.finish:
+                    return redirect('lease_property_details')
+                elif finish_lessor_data.elector_key:
+                    return redirect('addres_costumer')
+                elif finish_profile.finished:
+                    return redirect('lessors')
+                else:
+                    return redirect('profile_costumer')
+            else:
+                return redirect('compilance')
+
+        elif not is_lessor:
+            try:
+                finish_profile=TenantModel.objects.get(user=user)
+                if finish_profile.finish:
+                    return('addres_costumer')
+                else:
+                    return('profile_costumer')
+            except TenantModel.DoesNotExist:
+                return redirect('control_data')
+
+    else:
+        try:
+            broker=Broker.objects.get(user=user)
+            return redirect('dashboard')
+        except:
+            return redirect('404')
+
+
+
+
 
 class Compilance(View):
     template_name = 'compilance.html'
@@ -84,8 +166,8 @@ class ProfileUser(View):
         self.context['form_finished'] = instance_profile.finished
 
         if instance_profile.finished:
+            self.context['next_btn_url']='/costumers/lessors/'
             self.context['next_button'] = 'Siguiente'
-            #self.context['prev_button'] = 'Anterior'
 
         # RENDERIZA PRIMER FORM PROFILE
         return render(request, self.template_name, self.context)
@@ -151,6 +233,7 @@ class Lessors(View):
         
         
         if lessor.curp and lessor.elector_key:
+            self.context['next_btn_url']='/costumers/address/'
             self.context['next_button'] = 'Siguiente'
         
         return render(request, self.template_name, self.context)
@@ -164,8 +247,7 @@ class Lessors(View):
         
         if form.is_valid():
             form.save()
-
-        return redirect('lessors')
+        return redirect('addres_costumer')
 
 
 
@@ -191,8 +273,10 @@ class ConcurrentAddress(View):
         
         if is_lessor:
             instance = lessor.address_current
-            self.context['prev_btn_url']= "/costumers/lessors/"
-            self.context['prev_button'] = 'Anterior'
+            if lessor.curp and lessor.elector_key:
+                self.context['form_finished'] = True
+                self.context['prev_btn_url']= "/costumers/lessors/"
+                self.context['prev_button'] = 'Anterior'
         
         else:
             data_tenant_socio = TenantSocioModel.objects.get(user=user)
@@ -202,6 +286,10 @@ class ConcurrentAddress(View):
         self.context['description']='Ingresa tu domicilio actual'
         self.context['form'] = AddressForm(instance=instance)
         self.context['url_post'] = "/costumers/address/"
+
+        if lessor.finish:
+            self.context['next_btn_url']='/costumers/create/lease/property/'
+            self.context['next_button'] = 'Siguiente'
 
         return render(request, self.template_name, self.context)
     
@@ -246,14 +334,13 @@ class ConcurrentAddress(View):
         
         if is_lessor:
             lessor.address_current = current_address
+            lessor.finish=True
             lessor.save()
-            return redirect('')
+            return redirect('lease_property_details')
         else:
             previuos_address = TenantSocioModel.objects.get(user=user)
             previuos_address.previous_address = current_address
         
-        return redirect('addres_costumer')
-
 
 
 
@@ -290,6 +377,15 @@ class CreateLeaseProperty(View):
             self.context['description']='Por favor, ingrese los datos para renta'
             self.context['form'] = form
             self.context['url_post'] = "/costumers/create/lease/property/"
+
+            if lessor.finish:
+                self.context['form_finished'] = True
+                self.context['prev_btn_url']= "/costumers/address/"
+                self.context['prev_button'] = 'Anterior'
+            
+            if instance:
+                self.context['next_btn_url']='/costumers/address/lease/property/'
+                self.context['next_button'] = 'Siguiente'
 
             return render(request, self.template_name, self.context)
     
@@ -330,7 +426,7 @@ class CreateLeaseProperty(View):
                                                                 )
             lease_property.save()
         
-            return redirect('lease_property_details')
+            return redirect('lease_property_address')
 
 
 

@@ -19,7 +19,7 @@
                     <a href="{{ prev_btn_url }}" class="btn btn-secondary">{{ prev_button }}</a>
                 {% endif %}
                 {% if form_finished and next_button %}
-                    <a href="{% if is_lessor %}{% url 'lessors' %}{% else %}//{% endif %}" class="btn btn-success">{{ next_button }}</a>
+                    <a href="{{ next_btn_url }}" class="btn btn-success">{{ next_button }}</a>
                 {% endif %}
                 <button class="btn btn-primary">Guardar</button>
             </div>

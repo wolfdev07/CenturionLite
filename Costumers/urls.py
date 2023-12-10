@@ -11,6 +11,7 @@ propertyDetails = login_required(views.CreateLeaseProperty.as_view())
 propertyAddress = login_required(views.AddressLeaseProperty.as_view())
 
 urlpatterns = [
+    path('control-data/', views.control_data,  name='control_data'),
     path('compilance/', compilance, name='compilance'),
     path('profile/', profile, name="profile_costumer" ),
     path('lessors/', lessors, name='lessors'),
