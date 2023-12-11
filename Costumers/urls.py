@@ -12,7 +12,7 @@ propertyAddress = login_required(views.AddressLeaseProperty.as_view())
 index_lessors=login_required(views.CostumersLessorsIndex.as_view())
 
 urlpatterns = [
-    path('control-data/', login_required(views.control_data),  name='control_data'),
+    path('control-data/', views.control_data,  name='control_data'),
     path('compilance/', compilance, name='compilance'),
     path('profile/', profile, name="profile_costumer" ),
     path('lessors/', lessors, name='lessors'),

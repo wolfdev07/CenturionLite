@@ -12,23 +12,23 @@ from Costumers.forms import ProfileForm, LessorForm, AddressForm, LeasePropertyF
 
 # COSTUMERS VIEWS
 
-
+#FORMS COSTUMERS CONTROL
 def control_data(request):
-    
+
     user = request.user
 
     try:
         lessor = LessorModel.objects.get(user=user)
         is_costumer=True
         is_lessor=True
-    except LessorModel.DoesNotExist:
+    except:
+        is_lessor=False
         try:
             tenant=TenantModel.objects.get(user=user)
             is_costumer=True
-            is_lessor=False
-        except TenantModel.DoesNotExist:
+        except:
             is_costumer=False
-    
+
     if is_costumer:
 
         if is_lessor:
@@ -58,9 +58,9 @@ def control_data(request):
                 if leasse_property:
 
                     if leasse_property.finish:
-                        return('index_costumers')
+                        return redirect('index_lessors')
                     elif leasse_property.avaible:
-                        return('lease_property_address')
+                        return redirect('lease_property_address')
                 
                 elif finish_lessor_data.finish:
                     return redirect('lease_property_details')
