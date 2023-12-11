@@ -13,10 +13,12 @@
                     <span class="nav_name">Dashboard</span> 
                 </a>
             {% endif %}
-                <a href="#" class="nav_link"> 
+            {% if is_costumer %}
+                <a href="{% url 'control_data' %}" class="nav_link"> 
                     <i class='bx bx-user nav_icon'></i> 
                     <span class="nav_name">Users</span> 
                 </a>
+            {% endif %}
             </div>
         </div> 
         <a href="{% url 'logout' %}" class="nav_link"> 

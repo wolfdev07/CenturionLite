@@ -14,6 +14,7 @@ from Costumers.forms import ProfileForm, LessorForm, AddressForm, LeasePropertyF
 
 
 def control_data(request):
+    
     user = request.user
 
     try:
@@ -201,6 +202,7 @@ class ProfileUser(View):
 
 
 
+# LESSORS CONTROL FORMS DATA
 class Lessors(View):
 
     template_name = "forms.html"
@@ -319,18 +321,32 @@ class ConcurrentAddress(View):
                 return redirect('signin')
             
         try:
-                settlement = Settlement.objects.get(pk=settlement_id)
+            settlement = Settlement.objects.get(pk=settlement_id)
         except Settlement.DoesNotExist:
             self.context['error']="no existe el codigo postal"
             return render(request, self.template_name, self.context)
             
         
-        current_address = AddressModel.objects.create(user=user,
-                                                    street=street,
-                                                    number=number,
-                                                    internal_number=internal_number,
-                                                    settlement=settlement,)
-        current_address.save()
+        try:
+            pk = lessor.address_current.pk
+            instance = AddressModel.objects.get(pk=pk)
+        except:
+            instance=False
+
+        if instance:
+            current_address = instance
+            current_address.street=street
+            current_address.number=number
+            current_address.internal_number=internal_number
+            current_address.settlement=settlement
+            current_address.save()
+        else:
+            current_address = AddressModel.objects.create(user=user,
+                                                        street=street,
+                                                        number=number,
+                                                        internal_number=internal_number,
+                                                        settlement=settlement,)
+            current_address.save()
         
         if is_lessor:
             lessor.address_current = current_address
@@ -396,7 +412,8 @@ class CreateLeaseProperty(View):
         maintenance_price = request.POST['maintenance_price']
 
         try:
-            id_maintenance_included = request.POST['id_maintenance_included']
+            check = request.POST['maintenance_included']
+            id_maintenance_included = True
         except:
             id_maintenance_included = False
         
@@ -414,17 +431,33 @@ class CreateLeaseProperty(View):
                 is_lessor=False
             except  TenantModel.DoesNotExist:
                 return redirect('signin')
+            
+        try:
+            instance  = LeasePropertyModel.objects.get(lessor=lessor)
+        except LeasePropertyModel.DoesNotExist:
+            instance = False
         
         if is_lessor:
-            lease_property = LeasePropertyModel.objects.create(lessor=lessor,
-                                                                location=location,
-                                                                rental_price=rental_price,
-                                                                maintenance_price=maintenance_price,
-                                                                maintenance_included=id_maintenance_included,
-                                                                cfe_service_number=cfe_service_number,
-                                                                water_service_number=water_service_number,
-                                                                )
-            lease_property.save()
+
+            if instance:
+                instance.location=location
+                instance.rental_price=rental_price
+                instance.maintenance_price=maintenance_price
+                instance.maintenance_included=id_maintenance_included
+                instance.cfe_service_number=cfe_service_number
+                instance.water_service_number=water_service_number
+                instance.save()
+
+            else:
+                lease_property = LeasePropertyModel.objects.create(lessor=lessor,
+                                                                    location=location,
+                                                                    rental_price=rental_price,
+                                                                    maintenance_price=maintenance_price,
+                                                                    maintenance_included=id_maintenance_included,
+                                                                    cfe_service_number=cfe_service_number,
+                                                                    water_service_number=water_service_number,
+                                                                    )
+                lease_property.save()
         
             return redirect('lease_property_address')
 
@@ -467,6 +500,15 @@ class AddressLeaseProperty(View):
             self.context['form'] = form
             self.context['url_post'] = "/costumers/address/lease/property/"
 
+            if lease_property.avaible:
+                self.context['form_finished'] = True
+                self.context['prev_btn_url']= "/costumers/create/lease/property/"
+                self.context['prev_button'] = 'Anterior'
+            
+            if lease_property.finish:
+                self.context['next_btn_url']='/costumers/lessors/index/'
+                self.context['next_button'] = 'Siguiente'
+
             return render(request, self.template_name, self.context)
         
     def post(self, request):
@@ -499,20 +541,51 @@ class AddressLeaseProperty(View):
         except Settlement.DoesNotExist:
             self.context['error']="no existe el codigo postal"
             return render(request, self.template_name, self.context)
-            
+        
+        try:
+            lease_property=LeasePropertyModel.objects.get(lessor=lessor)
+            pk=lease_property.property_address.pk
+            instance=AddressModel.objects.get(pk=pk)
+        except:
+            lease_property=False
+            instance=False
+
         if is_lessor:
-            lease_property_address = AddressModel.objects.create(user=user,
+
+            if instance:
+                lease_property_address=instance
+                lease_property_address.street=street
+                lease_property_address.number=number
+                lease_property_address.internal_number=internal_number
+                lease_property_address.settlement=settlement
+                lease_property_address.save()
+            else:
+                lease_property_address = AddressModel.objects.create(user=user,
                                                         street=street,
                                                         number=number,
                                                         internal_number=internal_number,
                                                         settlement=settlement,)
-            lease_property_address.save()
+                lease_property_address.save()
+
 
             # SEARCH MODEL
-            lease_property  = LeasePropertyModel.objects.get(lessor=lessor)
+            lease_property = LeasePropertyModel.objects.get(lessor=lessor)
             lease_property.property_address = lease_property_address
+            lease_property.finish=True
             lease_property.save()
             
-            return redirect('lease_property_address')
+            return redirect('index_lessors')
         else:
             return redirect('lease_property_address')
+
+
+
+
+class CostumersLessorsIndex(View):
+    template_name = "costumers_index.html"
+    context={'is_lessor':False,}
+
+    def get(self, request):
+        self.context['viewname']='Index'
+        self.context['is_costumer']=True
+        return render(request, self.template_name, self.context)
