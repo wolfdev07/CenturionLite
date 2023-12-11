@@ -586,6 +586,14 @@ class CostumersLessorsIndex(View):
     context={'is_lessor':False,}
 
     def get(self, request):
+
+        user = request.user
+
+        lessor_profile=LessorModel.objects.get(user=user)
+        properties=LeasePropertyModel.objects.filter(lessor=lessor_profile).order_by('created_at')
+
+
         self.context['viewname']='Index'
         self.context['is_costumer']=True
+        self.context['properties']=properties
         return render(request, self.template_name, self.context)

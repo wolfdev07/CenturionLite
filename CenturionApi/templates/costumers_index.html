@@ -15,4 +15,85 @@
 </div>
 <!-- PAGE TITLE -->
 
+<div class="col-12">
+
+    <div class="card mb-3">
+        <div class="card-header">Propiedades <i class="fa-solid fa-house"></i></div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Estatus</th>
+                        <th>Informacion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for property in properties %}
+                        <tr>
+                            <td>{{ property.pk }}</td>
+                            <td>{{ property.avaible }}</td>
+                            <td><a href=""><i class="fa-solid fa-pen-to-square"></i> Editar</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <p>Propiedades</p>
+    {% for property in properties %}
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-home" aria-hidden="true"></i>
+                Casa Habitacion, clave: {{ property.pk }}
+                
+            </div>
+            <div class="card-body">
+                <div class="card-title text-end"><a href=""><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Informacion</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Precio de Renta: ${{ property.rental_price }}.00</td>
+                        </tr>
+                        <tr>
+                            <td>{{ property.avaible }}</td>
+                        </tr>
+                        <tr>
+                            <td>Precio de Mantenimiento: ${{ property.maintenance_price }}.00</td>
+                        </tr>
+                        <tr>
+                            <td>No. CFE: {{ property.cfe_service_number }} </td>
+                        </tr>
+                        <tr>
+                            <td>No. Agua: {{ property.water_service_number }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="card-footer">
+                <span style="font-size: 0.8rem;">{{ property.property_address.street }}, 
+                    {{ property.property_address.number }},
+                    {% if property.property_address.internal_number %}
+                        {{ property.property_address.internal_number }},
+                    {% endif %}
+                    {{ property.property_address.settlement.name }},
+                    {{ property.property_address.settlement.postal_code.city.name }}, Estado de
+                    {{ property.property_address.settlement.postal_code.city.state.name }}, 
+                    México, Codigo Postal: 
+                    {{ property.property_address.settlement.postal_code.code }}.
+                </span>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
 {% endblock main %}

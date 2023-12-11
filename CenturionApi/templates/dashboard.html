@@ -4,7 +4,17 @@
 
 {% block CSS %}
 {{ block.super }}
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+    
+    
+    <!--
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+            <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    -->
+    
 {% endblock CSS %}
 
 {% block main %}
@@ -72,6 +82,7 @@
                                     <th>Nombre</th>
                                     <th>Membresia</th>
                                     <th>Estatus</th>
+                                    <th>Nacionalidad</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,6 +95,7 @@
                                 {% else %}
                                     <td scope="row"><span class="badge text-bg-danger">Inactivo</span></td>
                                 {% endif %}
+                                    <td>{{ costumer.nationality }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -168,11 +180,26 @@
 {% endblock main %}
 {% block JS %}
 {{ block.super }}
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <!--
+        <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    -->
+    
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    
     <script>
-        let tableLessors = new DataTable('#lessors-table');
+        //let tableLessors = new DataTable('#lessors-table');
+        $('#lessors-table').DataTable( {
+                responsive: true
+        } );
     </script>
     <script>
-        let tableTenants = new DataTable('#tenants-table');
+        //let tableTenants = new DataTable('#tenants-table');
+        $('#tenants-table').DataTable( {
+                responsive: true
+        } );
     </script>
 {% endblock JS %}
