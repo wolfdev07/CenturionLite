@@ -41,7 +41,7 @@ class Dashboard(View):
                 costumers_tenants = {}
 
             context = {
-                'viewname': 'Dasboard',
+                'viewname': 'Dashboard',
                 'broker': broker,
                 'is_broker' : is_broker,
                 'form': CustomerCreationForm,
