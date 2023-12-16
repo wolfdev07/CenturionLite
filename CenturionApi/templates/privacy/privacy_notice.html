@@ -5,11 +5,11 @@
     <h2><strong>AVISO DE PRIVACIDAD</strong></h2>
 </div>
 
-<div class="overflow-auto bg-body-tertiary text-wrap p-1 mt-3" style="max-height: 70vh;">
+<div class="overflow-auto text-wrap mt-3" style="max-height: 70vh;">
     <p>De conformidad con lo establecido en la Ley Federal de Protección de Datos Personales en Posesión de Particulares, pone a su disposición el siguiente aviso de privacidad.</p>
     <h5>Finalidad del tratamiento de los datos:</h5>
-    <p>Servicios Legales ÁREA LEGAL MÉXICO, otorga la máxima importancia a la confidencialidad y debida protección de la información personal que le es confiada, Por su Código de Ética está comprometido a manejar tus datos personales de manera responsable y con apego a lo previsto en los Lineamientos de Transparencia, Acceso a la Información, Ley de Protección de Datos Personales en Posesión de los Particulares y demás normatividad aplicable.</p>
-    <p>Servicios Legales ÁREA LEGAL MÉXICO recaba datos personales para llevar a cabo sus actividades: asimismo, tiene la obligación legal y moral de cumplir con las medidas legales y de seguridad suficientes para proteger aquellos datos personales que haya recabado para las finalidades que en el presente Aviso de privacidad serán descritas.</p>
+    <p>Servicios Legales <strong>ÁREA LEGAL MÉXICO</strong>, otorga la máxima importancia a la confidencialidad y debida protección de la información personal que le es confiada, Por su Código de Ética está comprometido a manejar tus datos personales de manera responsable y con apego a lo previsto en los Lineamientos de Transparencia, Acceso a la Información, Ley de Protección de Datos Personales en Posesión de los Particulares y demás normatividad aplicable.</p>
+    <p>Servicios Legales <strong>ÁREA LEGAL MÉXICO</strong> recaba datos personales para llevar a cabo sus actividades: asimismo, tiene la obligación legal y moral de cumplir con las medidas legales y de seguridad suficientes para proteger aquellos datos personales que haya recabado para las finalidades que en el presente Aviso de privacidad serán descritas.</p>
     <p>Los datos personales que recabamos de usted serán utilizados para las siguientes facilidades, las cuales son necesarios para concretar nuestra relación con usted, así como atender los servicios y/o pedidos que solicite:</p>
     <ul>
         <li>Servicio de atención al cliente.</li>
@@ -43,17 +43,18 @@
     </div>
 </div>
 
-<div class="aling-items-center text-bg-dark shadow p-2 mt-3 mb-2">
-    <form action="{% url 'compilance' %}" method="POST">
-        <div class="justify-content-center align-self-center">
-            {% csrf_token %}
-            <input type="hidden" name="privacy-notice" value="true">
-            {{form|crispy}}
-        </div>
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Continuar</button>
-        </div>
-    </form>
+<div class="card aling-items-center bg-dark text-bg-dark shadow">
+    <div class="card-body">
+        <form action="{% url 'compilance' %}" method="POST">
+            <div class="justify-content-center align-self-center">
+                {% csrf_token %}
+                {{form|crispy}}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Continuar</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 

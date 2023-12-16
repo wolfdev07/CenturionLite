@@ -103,7 +103,7 @@ class Compilance(View):
         privacy = NoticeOfPrivacy.objects.get(user=user)
         privacy_accepted = privacy.accept
 
-        self.context['viewname'] = "Costumers"
+        self.context['viewname'] = "Clientes"
         self.context['is_broker'] = False
         self.context['privacy_accepted'] = privacy_accepted
 
@@ -112,14 +112,14 @@ class Compilance(View):
             return render(request, self.template_name, self.context)
         elif privacy_accepted:
     
-            return redirect('profile_costumer')
+            return redirect('control_data')
     
     def post(self, request):
 
         user = request.user
 
         try:
-            privacy_notice = request.POST['privacy-notice']
+            privacy_notice = request.POST['accept']
         except:
             privacy_notice = False
 
@@ -138,7 +138,7 @@ class Compilance(View):
 class ProfileUser(View):
 
     template_name =  "forms.html"
-    context = {'viewname': "Profile",
+    context = {'viewname': "Información",
                 "is_broker": False,}
     
     def get(self, request):
@@ -256,7 +256,7 @@ class Lessors(View):
 
 class ConcurrentAddress(View):
     template_name = "forms.html"
-    context = {'viewname': "Profile",
+    context = {'viewname': "Información",
                 "is_broker": False,}
     
     def get(self, request):
@@ -362,7 +362,7 @@ class ConcurrentAddress(View):
 
 class CreateLeaseProperty(View):
     template_name = 'forms.html'
-    context = {'viewname': "Profile",}
+    context = {'viewname': "Arrendadores",}
 
     def get(self, request):
         user =  request.user
@@ -466,7 +466,7 @@ class CreateLeaseProperty(View):
 
 class AddressLeaseProperty(View):
     template_name = 'forms.html'
-    context = {'viewname': "Address",}
+    context = {'viewname': "Arrendadores",}
 
     def get(self, request):
 
@@ -593,7 +593,7 @@ class CostumersLessorsIndex(View):
         properties=LeasePropertyModel.objects.filter(lessor=lessor_profile).order_by('created_at')
 
 
-        self.context['viewname']='Index'
+        self.context['viewname']='Arrendadores'
         self.context['is_costumer']=True
         self.context['properties']=properties
         return render(request, self.template_name, self.context)
