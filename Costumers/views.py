@@ -196,9 +196,9 @@ class ProfileUser(View):
             tenant = TenantModel.objects.get(user=user)
 
         if is_lessor:
-            return redirect('lessors')
+            return redirect('control_data')
         elif not is_lessor:
-            return redirect('tenants')
+            return redirect('control_data')
 
 
 
@@ -583,18 +583,43 @@ class AddressLeaseProperty(View):
 
 class CostumersLessorsIndex(View):
     template_name = "lessors_index.html"
-    context={'is_lessor':False,}
+    context={'is_lessor':True,}
 
     def get(self, request):
 
         user = request.user
 
         lessor_profile=LessorModel.objects.get(user=user)
+        profile=Profile.objects.get(user=user)
         properties=LeasePropertyModel.objects.filter(lessor=lessor_profile).order_by('created_at')
-
+        current_address = lessor_profile.address_current
 
         self.context['viewname']='Arrendadores'
         self.context['is_costumer']=True
         self.context['lessor_profile']=lessor_profile
+        self.context['profile']=profile
         self.context['properties']=properties
+        self.context['current_address']=current_address
+        return render(request, self.template_name, self.context)
+
+
+class CostumersLessorsData(View):
+    template_name = 'lessors_index.html'
+    context={'is_lessor':True,}
+
+    def get(self, request):
+
+        user = request.user
+
+        lessor_profile=LessorModel.objects.get(user=user)
+        profile=Profile.objects.get(user=user)
+        properties=LeasePropertyModel.objects.filter(lessor=lessor_profile).order_by('created_at')
+        current_address = lessor_profile.address_current
+
+        self.context['viewname']='Arrendadores'
+        self.context['is_costumer']=True
+        self.context['lessor_profile']=lessor_profile
+        self.context['profile']=profile
+        self.context['properties']=properties
+        self.context['current_address']=current_address
         return render(request, self.template_name, self.context)
