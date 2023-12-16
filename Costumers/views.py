@@ -604,7 +604,7 @@ class CostumersLessorsIndex(View):
 
 
 class CostumersLessorsData(View):
-    template_name = 'lessors_index.html'
+    template_name = 'data_lessors.html'
     context={'is_lessor':True,}
 
     def get(self, request):
