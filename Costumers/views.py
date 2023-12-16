@@ -582,7 +582,7 @@ class AddressLeaseProperty(View):
 
 
 class CostumersLessorsIndex(View):
-    template_name = "costumers_index.html"
+    template_name = "lessors_index.html"
     context={'is_lessor':False,}
 
     def get(self, request):
@@ -595,5 +595,6 @@ class CostumersLessorsIndex(View):
 
         self.context['viewname']='Arrendadores'
         self.context['is_costumer']=True
+        self.context['lessor_profile']=lessor_profile
         self.context['properties']=properties
         return render(request, self.template_name, self.context)

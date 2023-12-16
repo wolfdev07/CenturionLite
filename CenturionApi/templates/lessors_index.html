@@ -2,60 +2,27 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-
 {% block main %}
 <!-- PAGE TITLE -->
 <div class="row mb-2">
-    <div class="text-end">
-        <span class="badge text-bg-dark">
-            Cliente: {{ user.first_name }} {{ user.last_name }}
-        </span>
-    </div>
-    <h4>Inicio <i class="bx bx-grid-alt"></i></h4>
+
 </div>
 <!-- PAGE TITLE -->
 
 <div class="col-12">
 
-    <div class="card mb-3">
-        <div class="card-header">Propiedades <i class="fa-solid fa-house"></i></div>
-        <div class="card-body">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Estatus</th>
-                        <th>Informacion</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for property in properties %}
-                        <tr>
-                            <td>{{ property.pk }}</td>
-                            <td>{{ property.avaible }}</td>
-                            <td><a href=""><i class="fa-solid fa-pen-to-square"></i> Editar</a></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-        </div>
-    </div>
-
-    <p>Propiedades</p>
+    <h4>Mis Propiedades <i class="fa fa-home" aria-hidden="true"></i></h4>
     {% for property in properties %}
         <div class="card">
             <div class="card-header">
-                <i class="fa fa-home" aria-hidden="true"></i>
                 Casa Habitacion, clave: {{ property.pk }}
-                
             </div>
             <div class="card-body">
                 <div class="card-title text-end"><a href=""><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Informacion</th>
+                            <th scope="col">Información</th>
                         </tr>
                     </thead>
 
@@ -94,6 +61,8 @@
             </div>
         </div>
     {% endfor %}
+
+    <h4>Mis Datos <i class="fa fa-user mt-4" aria-hidden="true"></i></h4>
 </div>
 
 {% endblock main %}
