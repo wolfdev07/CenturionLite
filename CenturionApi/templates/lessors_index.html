@@ -37,20 +37,24 @@
     </div>
 
     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
-        {% for property in properties %}
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h4>Propiedad en Renta <i class="fa fa-home" aria-hidden="true"></i></h4>
-                </div>
-                <div class="card-body">
-                    <div class="card-title text-end"><a href=""><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Propiedad</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Perfil</button>
+                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Bancarios</button>
+                <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false">Archivos</button>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                {% for property in properties %}
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">Información</th>
                             </tr>
                         </thead>
-    
+
                         <tbody>
                             <tr>
                                 <td>Precio de Renta: ${{ property.rental_price }}.00</td>
@@ -83,20 +87,13 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    
-        <div class="card mt-4 mb-4">
-            <div class="card-header">
-                <h4>Perfil <i class="fa fa-user" aria-hidden="true"></i></h4>
-            </div>
-            <div class="card-body">
-                <div class="card-title text-end"><a href="{% url 'profile_costumer' %}"><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Información</th>
+                            <th scope="col">Perfil</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -108,19 +105,11 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-    
-        <div class="card mt-4 mb-4">
-            <div class="card-header">
-                <h4>Datos Complementarios <i class="fa fa-user" aria-hidden="true"></i></h4>
-            </div>
-            <div class="card-body">
-                <div class="card-title text-end"><a href="{% url 'lessors' %}"><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Información</th>
+                            <th scope="col">Datos complementarios</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -141,19 +130,11 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-    
-        <div class="card mt-4 mb-4">
-            <div class="card-header">
-                <h4>Direccion actual <i class="fa fa-house" aria-hidden="true"></i></h4>
-            </div>
-            <div class="card-body">
-                <div class="card-title text-end"><a href="{% url 'lessors' %}"><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Información</th>
+                            <th scope="col">Direccion Actual</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -175,6 +156,8 @@
                     </tbody>
                 </table>
             </div>
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">...</div>
+            <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
         </div>
     </div>
     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
