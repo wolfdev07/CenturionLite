@@ -1,0 +1,154 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+<!-- PAGE TITLE -->
+<div class="row mb-2">
+
+</div>
+<!-- PAGE TITLE -->
+
+<div class="col-12">
+    {% for property in properties %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Propiedad en Renta <i class="fa fa-home" aria-hidden="true"></i></h4>
+            </div>
+            <div class="card-body">
+                <div class="card-title text-end"><a href=""><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Información</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Precio de Renta: ${{ property.rental_price }}.00</td>
+                        </tr>
+                        <tr>
+                            <td>{{ property.avaible }}</td>
+                        </tr>
+                        <tr>
+                            <td>Precio de Mantenimiento: ${{ property.maintenance_price }}.00</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Direccion: {{ property.property_address.street }} 
+                                {{ property.property_address.number }},
+                                {% if property.property_address.internal_number %}
+                                    {{ property.property_address.internal_number }},
+                                {% endif %}
+                                {{ property.property_address.settlement.name }},
+                                {{ property.property_address.settlement.postal_code.city.name }}, Estado de
+                                {{ property.property_address.settlement.postal_code.city.state.name }}, 
+                                México, Codigo Postal: 
+                                {{ property.property_address.settlement.postal_code.code }}.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>No. CFE: {{ property.cfe_service_number }} </td>
+                        </tr>
+                        <tr>
+                            <td>No. Agua: {{ property.water_service_number }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="card mt-4 mb-4">
+        <div class="card-header">
+            <h4>Perfil <i class="fa fa-user" aria-hidden="true"></i></h4>
+        </div>
+        <div class="card-body">
+            <div class="card-title text-end"><a href="{% url 'profile_costumer' %}"><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Información</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nombre: {{ profile.first_name }} {{ profile.second_name }} {{ profile.last_name }} {{ profile.second_last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>email: {{ profile.email }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card mt-4 mb-4">
+        <div class="card-header">
+            <h4>Datos Complementarios <i class="fa fa-user" aria-hidden="true"></i></h4>
+        </div>
+        <div class="card-body">
+            <div class="card-title text-end"><a href="{% url 'lessors' %}"><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Información</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ocupacion: {{ lessor_profile.occupation }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nacionalidad: {{ lessor_profile.nationality }}</td>
+                    </tr>
+                    <tr>
+                        <td>Fecha de Nacimiento: {{ lessor_profile.birthday }}</td>
+                    </tr>
+                    <tr>
+                        <td>CURP: {{ lessor_profile.curp }}</td>
+                    </tr>
+                    <tr>
+                        <td>No. id: {{ lessor_profile.elector_key }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card mt-4 mb-4">
+        <div class="card-header">
+            <h4>Direccion actual <i class="fa fa-house" aria-hidden="true"></i></h4>
+        </div>
+        <div class="card-body">
+            <div class="card-title text-end"><a href="{% url 'lessors' %}"><i class="fa-solid fa-pen-to-square"></i> Editar</a></div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Información</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Calle: {{ current_address.street }} </td>
+                    </tr>
+                    <tr>
+                        <td>Colonia: {{ current_address.settlement.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Ciudad: {{ current_address.settlement.postal_code.city.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Estado: {{ current_address.settlement.postal_code.city.state.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Codigo Postal: {{ current_address.settlement.postal_code.code }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock main %}
