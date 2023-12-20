@@ -4,6 +4,7 @@ from Costumers.models import *
 #EXTENDS COSTUMER USER MODEL
 
 admin.site.register(Profile)
+admin.site.register(MembershipModels)
 
 #LESSOR ADMIN MODELS
 

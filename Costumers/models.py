@@ -26,11 +26,28 @@ class Profile(models.Model):
         return self.user.username
 
 
+
+"""
+
+MODELO DE MEMBRESIAS
+
+"""
+
+class MembershipModels(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    number = models.CharField(max_length=200, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.number}"
+
+
 """
 
 ESTE MODELO SE OCUPARA PARA PODER SER USADO PARA DIRECCIONES
 
 """
+
 
 class AddressModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -41,6 +58,7 @@ class AddressModel(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - address"
+
 
 
 class ReferencesModel(models.Model):
@@ -68,7 +86,7 @@ class LessorModel(models.Model):
     birthday = models.DateField()
     gender =  models.CharField(max_length=120, blank=True, null=True)
     occupation = models.CharField(max_length=250, null=True, blank=True)
-    membership = models.CharField(max_length=20)
+    membership_number = models.ForeignKey(MembershipModels, on_delete=models.CASCADE, null=True, blank=True)
     address_current = models.ForeignKey(AddressModel, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     broker = models.ForeignKey(Broker, on_delete=models.CASCADE)
@@ -76,6 +94,7 @@ class LessorModel(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.broker.agency.name} "
+
 
 
 class DataPaymentModel(models.Model):
@@ -88,6 +107,7 @@ class DataPaymentModel(models.Model):
 
     def __str__(self):
         return f'{self.bank} - {self.account}'
+
 
 
 class LessorDocumentsModel(models.Model):
@@ -104,6 +124,7 @@ class LessorDocumentsModel(models.Model):
 
     def __str__(self):
         return f"{self.lessor.user.username} {self.lessor.user.last_name} - documents"
+
 
 
 class LeasePropertyModel(models.Model):
@@ -133,6 +154,7 @@ MODELOS DE ARRENDATARIO
 """
 
 
+
 class TenantModel(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -145,7 +167,7 @@ class TenantModel(models.Model):
     birthday = models.DateField(blank=True, null=True)
     gender =  models.CharField(max_length=120, blank=True, null=True)
     occupation = models.CharField(max_length=250, null=True, blank=True)
-    membership = models.CharField(max_length=20)
+    membership_number = models.ForeignKey(MembershipModels, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     broker = models.ForeignKey(Broker, on_delete=models.CASCADE)
     house_in_perspective = models.ForeignKey(LeasePropertyModel, on_delete=models.CASCADE, null=True, blank=True)
@@ -154,7 +176,8 @@ class TenantModel(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.broker.agency.name}"
-    
+
+
 
 class TenantEconomicModel(models.Model):
 
@@ -191,6 +214,7 @@ class TenantSocioModel(models.Model):
 
     def __str__(self):
         return f"{self.user} Entorno Social"
+
 
 
 class SolidarityEconomicModel(models.Model):

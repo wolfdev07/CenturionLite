@@ -10,7 +10,7 @@ from Brokers.models import Broker
 from Brokers.utils import generate_temp_password, validate_phone_number
 from CenturionApi.utils import create_costumer_membership, send_wa_credentials
 from CenturionApi.models import NoticeOfPrivacy
-from Costumers.models import LessorModel, TenantModel, Profile
+from Costumers.models import LessorModel, TenantModel, Profile, MembershipModels
 
 
 class Dashboard(View):
@@ -74,6 +74,9 @@ class Dashboard(View):
         
         if phone_is_valid & bool(first_name) & bool(last_name):
 
+            """
+                CREAR USUARIO
+            """
             temp_password, hashed_temp_password = generate_temp_password()
 
             user_costumer = User.objects.create(username=phone, password=hashed_temp_password)
@@ -84,7 +87,9 @@ class Dashboard(View):
             print(f"{user_costumer}: {temp_password}")
 
             phone_complete = f"{phone_code}{phone}"
-            membership = create_costumer_membership()
+            membership_number = create_costumer_membership()
+            membership = MembershipModels.objects.create(user=user_costumer,
+                                                        number=membership_number,)
 
             actual_date = datetime.now()
             register_date = actual_date - timedelta(days=18 * 365)
@@ -94,14 +99,14 @@ class Dashboard(View):
                                                             phone=phone_complete, 
                                                             broker=broker,
                                                             birthday=register_date,
-                                                            membership=membership )
+                                                            membership_number=membership,)
                 create_lessor.save()
 
             else:
                 create_tenant = TenantModel.objects.create( user=user_costumer,
                                                             phone=phone_complete, 
                                                             broker=broker, 
-                                                            membership=membership )
+                                                            membership_number=membership,)
                 create_tenant.save()
 
             NoticeOfPrivacy.objects.create(user=user_costumer, accept=False)
@@ -109,7 +114,10 @@ class Dashboard(View):
             Profile.objects.create(user=user_costumer, 
                                     first_name=user_costumer.first_name,
                                     last_name=user_costumer.last_name,)
-
+            
+            """
+                ENVIA WHATSAPP
+            """
             data = {
                 'brokername': f"{request.user.first_name} {request.user.last_name}",
                 'code_country':phone_code,
@@ -121,7 +129,7 @@ class Dashboard(View):
             }
             
             send = send_wa_credentials(data)
-
+            
             if send:
                 self.context['success'] = "Usuario creado con exito."
                 return redirect('dashboard')
