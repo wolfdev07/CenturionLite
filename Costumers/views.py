@@ -7,7 +7,7 @@ from CenturionApi.models import NoticeOfPrivacy, Settlement
 from CenturionApi.forms import NoticeOfPrivacyForm
 from Brokers.models import Broker
 from Costumers.models import LessorModel, TenantModel, Profile, AddressModel, TenantEconomicModel, TenantSocioModel, LeasePropertyModel
-from Costumers.forms import ProfileForm, LessorForm, AddressForm, LeasePropertyForm
+from Costumers.forms import ProfileForm, LessorForm, AddressForm, LeasePropertyForm, DataPaymentForm
 
 
 # COSTUMERS VIEWS
@@ -581,6 +581,15 @@ class AddressLeaseProperty(View):
 
 
 
+class DataPaymentLessor(View):
+    template_name = 'forms.html'
+    context = {'viewname': "Arrendadores",}
+
+    def get(self, request):
+        self.context['form']=DataPaymentForm
+        return render(request, self.template_name, self.context)
+
+
 class CostumersLessorsIndex(View):
     template_name = "lessors_index.html"
     context={'is_lessor':True,}
@@ -601,6 +610,7 @@ class CostumersLessorsIndex(View):
         self.context['properties']=properties
         self.context['current_address']=current_address
         return render(request, self.template_name, self.context)
+
 
 
 class CostumersLessorsData(View):

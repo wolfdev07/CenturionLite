@@ -71,8 +71,8 @@
                                     <th>Nombre</th>
                                     <th>Membresia</th>
                                     <th>Estatus</th>
-                                    <th>Telefono</th>
-                                    <th>Informacion</th>
+                                    <th>Teléfono</th>
+                                    <th>Información</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,16 +80,17 @@
                                 <tr>
                                     <td>{{ costumer.user.first_name }} {{ costumer.user.last_name }}</td>
                                     <td>{{ costumer.membership_number.number }}</td>
+
                                 {% if costumer.finish %}
                                     <td scope="row"><span class="badge text-bg-success">Activo</span></td>
                                 {% else %}
                                     <td scope="row"><span class="badge text-bg-danger">Inactivo</span></td>
                                 {% endif %}
 
-                                    <td><a href="tel:+{{ costumer.phone }}">{{ costumer.phone }}</a></td>
+                                    <td><a class="icon-link icon-link-hover" href="tel:+{{ costumer.phone }}">+{{ costumer.phone }}<i class="fa-solid fa-phone-volume"></i></a></td>
 
                                 {% if costumer.finish %}
-                                    <td><a class="btn btn-primary btn-sm" href="{% url 'costumer_details' membership=costumer.membership_number.number %}">Ver mas</a></td>
+                                    <td><a class="icon-link icon-link-hover" href="{% url 'costumer_details' membership=costumer.membership_number.number %}">Ver más<i class="fa-solid fa-magnifying-glass-plus"></i></a></td>
                                 {% else %}
                                     <td scope="row"><span class="badge text-bg-danger">No disponible</span></td>
                                 {% endif %}
@@ -100,11 +101,6 @@
                     </div>
                 </div>
             </div>
-        <!-- CARD FOOTER DISABLED 
-            <div class="card-footer text-body-secondary">
-                
-            </div>
-        -->
         </div>
     </div>
     <!-- CARD ARRENDADORES -->

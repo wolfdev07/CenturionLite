@@ -2,7 +2,7 @@ from django import forms
 from django.forms import DateInput
 from django.contrib.auth.models import User
 
-from Costumers.models import Profile, LessorModel, AddressModel, LeasePropertyModel
+from Costumers.models import Profile, LessorModel, AddressModel, LeasePropertyModel, DataPaymentModel
 
 
 ocupaciones_generales = [
@@ -43,6 +43,16 @@ nacionalidades = [
     ('francesa', '🇫🇷 Francesa'),
     ('alemana', '🇩🇪 Alemana'),
     # Puedes agregar más nacionalidades y emojis aquí
+]
+
+
+bancos_nacionales=[
+    ('BBVA', 'BBVA'),
+    ('CitiBanamex', 'CitiBanamex'),
+    ('HSBC', 'HSBC'),
+    ('Santander', 'Santander'),
+    ('Actinver', 'Actinver'),
+    ('Banco Azteca', 'Banco Azteca'),
 ]
 
 
@@ -96,7 +106,7 @@ class AddressForm(forms.ModelForm):
         model = AddressModel
         fields = ['postal_code', 'state', 'city', 'settlement', 'street', 'number', 'internal_number']
         labels = {
-            'street': 'Calle (De ser necesario agrega: Manzana y Lote)',
+            'street': 'Calle',
             'number': 'Numero',
             'internal_number': 'Numero Interior',
         }
@@ -128,4 +138,21 @@ class LeasePropertyForm(forms.ModelForm):
             'cfe_service_number': 'Número de Servicio CFE*',
             'water_service_number': 'Número de Servicio Agua*',
             'location': 'URL ubicación maps',
+        }
+
+
+class DataPaymentForm(forms.ModelForm):
+
+    class Meta:
+        model=DataPaymentModel
+        fields=['bank', 'interbank_account', 'account',]
+
+        labels={
+            'bank':'Banco',
+            'interbank_account':'Clabe Interbancaria',
+            'account': 'Cuenta',
+        }
+
+        widgets={
+            'bank': forms.Select(choices=(bancos_nacionales), attrs={'class': 'form-group form-control'}),
         }

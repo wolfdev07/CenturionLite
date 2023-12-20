@@ -23,12 +23,10 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
 
-            
             <div class="offcanvas-body">
-                <p>
-                    Bienvenido(a), {{ user.first_name }} {{ user.last_name }}.
-                </p>
+
                 <hr>
+                
                 <div class="d-flex flex-column text-bg-dark">
 
                     <ul class="nav nav-pills flex-column mb-auto">
@@ -48,14 +46,14 @@
                             {% endif %}
                         </li>
 
+                        <!-- NAV LINK EXAMPLE 
                         <li class="mb-3">
                             <a href="{% url 'control_data' %}" class="nav-link text-white">
                                 <i class='bx bx-user nav_icon'></i>
                                 Perfil
                             </a>
                         </li>
-    
-                        <!-- NAV LINK EXAMPLE 
+
                         <li>
                             <a href="{% url 'control_data' %}" class="nav-link text-white">
                                 <i class='bx bx-user nav_icon'></i>
@@ -68,9 +66,8 @@
                     <hr>
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
                             <strong>
-                                    {{ user.first_name }} {{ user.last_name }}
+                                    Más opciones
                             </strong>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
