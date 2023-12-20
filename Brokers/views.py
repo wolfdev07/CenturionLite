@@ -10,7 +10,7 @@ from Brokers.models import Broker
 from Brokers.utils import generate_temp_password, validate_phone_number
 from CenturionApi.utils import create_costumer_membership, send_wa_credentials
 from CenturionApi.models import NoticeOfPrivacy
-from Costumers.models import LessorModel, TenantModel, Profile, MembershipModels
+from Costumers.models import LessorModel, TenantModel, Profile, MembershipModels, Profile
 
 
 class Dashboard(View):
@@ -141,43 +141,55 @@ class Dashboard(View):
 
 
 
-class DetailCostumer(View):
-    template_name = 'costumer_dash.html'
-    context = {'is_broker': True,}
+class CostumerDetails(View):
+    template_name = 'costumer_details.html'
+    context = {}
 
-    def get(self, request):
+    def get(self, request, membership):
 
         user = request.user
+
+        membership_object = MembershipModels.objects.get(number=membership)
 
         try: 
             broker = Broker.objects.get(user=user)
             is_broker = True
         except Broker.DoesNotExist:
+            broker={'is_manager':False,}
             is_broker = False
         
 
-        if is_broker:
+        if is_broker or broker.is_manager or user.is_staff:
 
             try:
-                costumers_lessors = LessorModel.objects.filter(broker=broker)
-            except LessorModel.DoesNotExist:
-                costumers_lessors = {}
+                lessor = LessorModel.objects.get(membership_number=membership_object,
+                                                broker=broker)
+                costumer=lessor
+                costumer_user=lessor.user
+            except:
+                lessor = False
 
             try:
-                costumers_tenants = TenantModel.objects.filter(broker=broker)
-            except TenantModel.DoesNotExist:
-                costumers_tenants = {}
+                tenant = TenantModel.objects.filter(membership_number=membership_object,
+                                                    broker=broker)
+                costumer=tenant
+                costumer_user=tenant.user
+            except:
+                tenant = False
+            
+            profile=Profile.objects.get(user=costumer_user)
 
-            context = {
-                'viewname': 'Dasboard',
-                'broker': broker,
-                'is_broker' : is_broker,
-                'form': CustomerCreationForm,
-                'costumers_lessors' : costumers_lessors,
-                'costumers_tenants': costumers_tenants,
-            }
+            self.context['viewname']='Details'
+            self.context['broker']=broker
+            self.context['is_broker']=is_broker
+            self.context['costumer']=costumer
+            self.context['profile']=profile
 
-            return render(request, self.template_name, context=context)
+
+            if lessor:
+                return render(request, self.template_name, context=self.context)
+            elif tenant:
+                return render(request, self.template_name, context=self.context)
         
         else: 
             return redirect('signin')

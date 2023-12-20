@@ -74,19 +74,26 @@
                                     <th>Membresia</th>
                                     <th>Estatus</th>
                                     <th>Nacionalidad</th>
+                                    <th>Detalles</th>
                                 </tr>
                             </thead>
                             <tbody>
                             {% for costumer in costumers_lessors %}
                                 <tr>
                                     <td>{{ costumer.user.first_name }} {{ costumer.user.last_name }}</td>
-                                    <td>{{ costumer.membership }}</td>
-                                {% if costumer.is_active %}
+                                    <td>{{ costumer.membership_number.number }}</td>
+                                {% if costumer.finish %}
                                     <td scope="row"><span class="badge text-bg-success">Activo</span></td>
                                 {% else %}
                                     <td scope="row"><span class="badge text-bg-danger">Inactivo</span></td>
                                 {% endif %}
                                     <td>{{ costumer.nationality }}</td>
+
+                                {% if costumer.finish %}
+                                    <td><a class="btn btn-primary btn-sm" href="{% url 'costumer_details' membership=costumer.membership_number.number %}">Ver mas</a></td>
+                                {% else %}
+                                    <td scope="row"><span class="badge text-bg-danger">No disponible</span></td>
+                                {% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>
