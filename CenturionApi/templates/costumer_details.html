@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block main %}
-<section>
+<section class="mb-3">
     <div class="card">
         <div class="card-header">
             <h3>Perfil</h3>
@@ -21,6 +21,40 @@
                     </tr>
                     <tr>
                         <td>email: <a href="mailto:{{ profile.email }}">{{ profile.email }}</a> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="mb-3">
+    <div class="card">
+        <div class="card-header">
+            Datos datos para arrendamiento
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>Información</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ costumer.nationality }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ costumer.phone }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ costumer.curp }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ costumer.elector_key }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ costumer.birthday }}</td>
                     </tr>
                 </tbody>
             </table>

@@ -162,20 +162,19 @@ class CostumerDetails(View):
         if is_broker or broker.is_manager or user.is_staff:
 
             try:
-                lessor = LessorModel.objects.get(membership_number=membership_object,
+                costumer = LessorModel.objects.get(membership_number=membership_object,
                                                 broker=broker)
-                costumer=lessor
-                costumer_user=lessor.user
+                costumer_user=costumer.user
+                lessor=True
             except:
                 lessor = False
-
-            try:
-                tenant = TenantModel.objects.filter(membership_number=membership_object,
-                                                    broker=broker)
-                costumer=tenant
-                costumer_user=tenant.user
-            except:
-                tenant = False
+                try:
+                    costumer = TenantModel.objects.filter(membership_number=membership_object,
+                                                        broker=broker)
+                    costumer_user=costumer.user
+                    tenant=True
+                except:
+                    tenant = False
             
             profile=Profile.objects.get(user=costumer_user)
 
