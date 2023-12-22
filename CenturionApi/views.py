@@ -40,15 +40,18 @@ class SignIn(View):
             
             user_login = request.user
 
-            try:
-                is_broker = Broker.objects.get(user=user_login)
-            except Broker.DoesNotExist:
-                is_broker = False
-            
-            if is_broker:
-                return redirect('dashboard')
+            if user_login.is_staff:
+                return redirect('manager')
             else:
-                return redirect('control_data')
+                try:
+                    is_broker = Broker.objects.get(user=user_login)
+                except Broker.DoesNotExist:
+                    is_broker = False
+                
+                if is_broker:
+                    return redirect('dashboard')
+                else:
+                    return redirect('control_data')
 
 
 # LOGOUT FUNCTION

@@ -1,3 +1,8 @@
 from django.shortcuts import render
+from django.views.generic import View
 
-# Create your views here.
+class ManagerView(View):
+    template_name = 'manager.html'
+    context ={'viewname':'Manager'}
+    def get(request, self):
+        return render(request, self.template_name, self.context)
