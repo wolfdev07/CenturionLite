@@ -140,6 +140,7 @@ class LeasePropertyModel(models.Model):
     maintenance_included = models.BooleanField()
     cfe_service_number = models.CharField(max_length=200, null=True, blank=True)
     water_service_number = models.CharField(max_length=200, null=True, blank=True)
+    property_code = models.CharField(max_length=120, null=True, blank=True)
     finish = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
