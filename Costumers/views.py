@@ -625,13 +625,50 @@ class DataPaymentLessor(View):
     context = {'viewname': "Arrendadores",}
 
     def get(self, request):
+        user = request.user
+        lessor = LessorModel.objects.get(user=user)
+
+        try:
+            instance =  DataPaymentModel.objects.get(lessor=lessor)
+        except DataPaymentModel.DoesNotExist:
+            instance = False
+        if instance:
+            form = DataPaymentForm(instance=instance)
+        else:
+            form = DataPaymentForm
 
         self.context['form_name'] = 'Datos de Pago'
         self.context['description']='Ingrese los datos para recibir el pago'
-        self.context['url_post'] = "/costumers/address/lease/property/"
-        self.context['form']=DataPaymentForm
+        self.context['url_post'] = "/costumers/lessors/data-payment/"
+        self.context['form']=form
         return render(request, self.template_name, self.context)
 
+    def post(self, request):
+
+        user = request.user
+        bank = request.POST['bank']
+        interbank_account = request.POST['interbank_account']
+        account=request.POST['account']
+        comments = request.POST['comments']
+
+        try:
+            lessor =  LessorModel.objects.get(user=user)
+        except LessorModel.DoesNotExist:
+            lessor = False
+        
+        if lessor:
+            create_account=DataPaymentModel.objects.create(lessor=lessor,
+                                                            bank=bank,
+                                                            interbank_account=interbank_account,
+                                                            account=account,
+                                                            comments=comments,
+                                                            )
+            create_account.save()
+            create_account.active_account=True
+            create_account.save()
+            return redirect('control_data')
+        else:
+            return redirect('control_data')
 
 """
 
