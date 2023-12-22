@@ -145,11 +145,12 @@ class DataPaymentForm(forms.ModelForm):
 
     class Meta:
         model=DataPaymentModel
-        fields=['bank', 'interbank_account', 'account',]
+        fields=['bank', 'interbank_account', 'account', 'comments',]
 
         labels={
             'bank':'Banco',
             'interbank_account':'Clabe Interbancaria',
+            'comments':'Especificaciones (opcional)',
             'account': 'Cuenta',
         }
 

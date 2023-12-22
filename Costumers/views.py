@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from CenturionApi.models import NoticeOfPrivacy, Settlement
 from CenturionApi.forms import NoticeOfPrivacyForm
 from Brokers.models import Broker
-from Costumers.models import LessorModel, TenantModel, Profile, AddressModel, TenantEconomicModel, TenantSocioModel, LeasePropertyModel
+from Costumers.models import LessorModel, TenantModel, Profile, AddressModel, TenantEconomicModel, TenantSocioModel, LeasePropertyModel, DataPaymentModel
 from Costumers.forms import ProfileForm, LessorForm, AddressForm, LeasePropertyForm, DataPaymentForm
 
 
@@ -58,9 +58,18 @@ def control_data(request):
             except NoticeOfPrivacy.DoesNotExist:
                 compilance = False
             
+            try:
+                data_payment = DataPaymentModel.objects.get(lessor=lessor)
+                account_activate = data_payment.active_account
+            except DataPaymentModel.DoesNotExist:
+                account_activate = False
+            
             if compilance.accept:
                 # FORM CONTROL (REDIRECT TO FORM)
-                if leasse_property:
+                if not account_activate:
+                    return redirect('data_payment_lessors')
+
+                elif leasse_property:
 
                     if leasse_property.finish:
                         return redirect('index_lessors')
@@ -616,6 +625,10 @@ class DataPaymentLessor(View):
     context = {'viewname': "Arrendadores",}
 
     def get(self, request):
+
+        self.context['form_name'] = 'Datos de Pago'
+        self.context['description']='Ingrese los datos para recibir el pago'
+        self.context['url_post'] = "/costumers/address/lease/property/"
         self.context['form']=DataPaymentForm
         return render(request, self.template_name, self.context)
 
