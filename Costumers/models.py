@@ -103,6 +103,7 @@ class DataPaymentModel(models.Model):
     bank = models.CharField(max_length=120)
     interbank_account = models.CharField(max_length=200)
     account = models.CharField(max_length=200, blank=True, null=True)
+    active_account = models.BooleanField(default=False)
     # OTRAS ESPECIFICACIONES
 
     def __str__(self):

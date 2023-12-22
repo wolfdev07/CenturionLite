@@ -12,7 +12,12 @@ from Costumers.forms import ProfileForm, LessorForm, AddressForm, LeasePropertyF
 
 # COSTUMERS VIEWS
 
-#FORMS COSTUMERS CONTROL
+"""
+
+COSTUMER CONTROL FORMS
+
+"""
+
 def control_data(request):
 
     user = request.user
@@ -92,7 +97,11 @@ def control_data(request):
 
 
 
+"""
 
+COMPILANCE PRIVACY NOTICE
+
+"""
 
 class Compilance(View):
     template_name = 'compilance.html'
@@ -133,7 +142,11 @@ class Compilance(View):
             return redirect('compilance')
 
 
+"""
 
+PERFIL DE USUARIO
+
+"""
 
 class ProfileUser(View):
 
@@ -201,8 +214,12 @@ class ProfileUser(View):
             return redirect('control_data')
 
 
+"""
 
-# LESSORS CONTROL FORMS DATA
+ARRENDADORES: DATOS ADICIONALES
+
+"""
+
 class Lessors(View):
 
     template_name = "forms.html"
@@ -251,8 +268,11 @@ class Lessors(View):
             form.save()
         return redirect('addres_costumer')
 
+"""
 
+CLIENTES: DIRECCION ACTUAL
 
+"""
 
 class ConcurrentAddress(View):
     template_name = "forms.html"
@@ -358,7 +378,11 @@ class ConcurrentAddress(View):
             previuos_address.previous_address = current_address
         
 
+"""
 
+ARRENDADORES: CREAR PROPIEDAD EN RENTA
+
+"""
 
 class CreateLeaseProperty(View):
     template_name = 'forms.html'
@@ -462,7 +486,11 @@ class CreateLeaseProperty(View):
             return redirect('lease_property_address')
 
 
+"""
 
+ARRENDADORES: DIRECCION DE PROPIEDAD EN RENTA
+
+"""
 
 class AddressLeaseProperty(View):
     template_name = 'forms.html'
@@ -578,9 +606,11 @@ class AddressLeaseProperty(View):
         else:
             return redirect('lease_property_address')
 
+"""
 
+ARRENDADORES: DATOS BANCARIOS
 
-
+"""
 class DataPaymentLessor(View):
     template_name = 'forms.html'
     context = {'viewname': "Arrendadores",}
@@ -590,6 +620,11 @@ class DataPaymentLessor(View):
         return render(request, self.template_name, self.context)
 
 
+"""
+
+INDEX CLIENTES POR TIPO
+
+"""
 class CostumersLessorsIndex(View):
     template_name = "lessors_index.html"
     context={'is_lessor':True,}
